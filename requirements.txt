@@ -1,0 +1,17 @@
+# Core
+torch>=2.2.0
+transformers>=4.40.0
+datasets>=2.19.0
+huggingface_hub>=0.22.0
+
+# Numerics / data
+numpy>=1.26.0
+scikit-learn>=1.4.0       # for classifier (Phase 3) and clustering (Phase 4)
+pandas>=2.2.0
+
+# Visualization (Phase 6 / poster)
+umap-learn>=0.5.6
+matplotlib>=3.8.0
+
+# Utilities
+tqdm>=4.66.0              # progress bars
