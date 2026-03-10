@@ -38,7 +38,6 @@ MAJORITY_THRESHOLD = 0.5         # wrong on >50% of runs → is_correct=False
 OUTPUT_PATH = "data/labeled_instances.json"
 SPLITS_DIR = "data/"
 
-
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------

@@ -34,20 +34,15 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 def load_gemma3(model_id: str = MODEL_ID):
     """
     Load the Gemma 3 model and tokenizer from HuggingFace.
-
-    Steps:
-    1. Load the tokenizer with AutoTokenizer.from_pretrained(model_id)
-    2. Load the model with AutoModelForCausalLM.from_pretrained()
-       - Use torch_dtype=torch.bfloat16 to reduce memory usage
-       - Use device_map="auto" to handle multi-GPU or CPU fallback
-    3. Set model.eval() — we are never training this model
-    4. Return (model, tokenizer)
-
-    NOTE: you will need a HuggingFace account token to access Gemma 3.
-    Set it via: huggingface-cli login
-    or pass token=<your_token> to from_pretrained().
     """
-    raise NotImplementedError
+    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        torch_dtype=torch.bfloat16, 
+        device_map="auto"
+    )
+    model.eval()
+    return (model, tokenizer)
 
 
 # ---------------------------------------------------------------------------
@@ -68,7 +63,7 @@ def load_available_layers(sae_repo_id: str = SAE_REPO_ID) -> list[str]:
 
     Call this once before committing to a TARGET_LAYER value.
     """
-    raise NotImplementedError
+    files = huggingface_hub.list_repo_files(sae_repo_id)
 
 
 def load_sae(sae_repo_id: str = SAE_REPO_ID, layer: int = TARGET_LAYER):

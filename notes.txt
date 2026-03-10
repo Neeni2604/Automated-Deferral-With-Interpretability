@@ -1,0 +1,3 @@
+- Create an account on hugging Face
+- Generate a token (fine-grained, read permissions)
+- Run `hf auth login` to login with your Hugging Face token
