@@ -198,10 +198,6 @@ class RobustnessLabeler:
     """
     Runs Gemma 3 multiple times per instance at different sampling temperatures
     and assigns a majority-vote correctness label to each instance.
-
-    Addresses the professor's robustness requirement: an instance is only
-    labeled 'correct' if the model gets it right on the majority of runs,
-    not just once by luck.
     """
 
     def __init__(
@@ -313,7 +309,7 @@ class RobustnessLabeler:
 
 
 # ---------------------------------------------------------------------------
-# Persistence helpers
+# Helper functions
 # ---------------------------------------------------------------------------
 
 def _to_dict(inst: Instance) -> dict:

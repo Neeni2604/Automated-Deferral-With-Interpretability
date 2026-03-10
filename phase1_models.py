@@ -7,12 +7,13 @@ Relevant HuggingFace repos:
   GemmaScope 2  : loaded via sae_lens release "gemma-scope-2-4b-it-resid_post"
                   (SAEs trained on Gemma 3 4B IT residual stream, every layer)
 
-Gemma 3 4B has 46 transformer layers (0-45).
-TARGET_LAYER = 26 is a late-middle layer; experiment with 20, 24, 28, 32, 36.
+Available resid_post layers: 9, 17, 22, 29
 """
 
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
+from huggingface_hub import hf_hub_download
+from safetensors.torch import load_file
 
 
 # ---------------------------------------------------------------------------
@@ -23,11 +24,13 @@ MODEL_ID    = "google/gemma-3-4b-it"
 
 # sae_lens release name for Gemma Scope 2 — 4B instruction-tuned, residual stream
 # Full list: https://huggingface.co/google/gemma-scope-2-4b-it
-SAE_REPO_ID = "gemma-scope-2-4b-it-res-all"
+SAE_REPO_ID = "google/gemma-scope-2-4b-it"
 
-# Late-middle layer of Gemma 3 4B (0-indexed, 46 layers total).
-# Good starting point; sweep 20, 24, 28, 32, 36 in later experiments.
-TARGET_LAYER = 26
+# Late-middle layer of Gemma 3 4B (0-indexed, 35 layers total).
+TARGET_LAYER = 22
+SAE_TYPE     = "resid_post"
+SAE_WIDTH    = "16k"
+SAE_L0       = "medium"
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -54,7 +57,7 @@ def load_gemma3(model_id: str = MODEL_ID):
     print(f"Loading model: {model_id} (bfloat16, device_map=auto) ...")
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
-        dtype=torch.bfloat16,    # 'dtype' is the correct kwarg in transformers >= 4.40
+        dtype=torch.bfloat16,
         device_map="auto",
     )
     model.eval()
@@ -73,74 +76,33 @@ def load_available_layers(sae_repo_id: str = SAE_REPO_ID) -> list[str]:
     Print the SAE release and target layer being used.
     With sae_lens we don't need to enumerate files manually.
     """
-    print(f"SAE release  : {sae_repo_id}")
-    print(f"Target layer : {TARGET_LAYER}")
-    print(f"SAE id : resid_post_all/layer_{TARGET_LAYER}_width_16k_l0_small")
-    print("  (widths available: 16k, 64k, 256k, 1m)")
-    print("  (L0 options: small ~10-20, medium ~30-60, large ~60-150)")
-    return [f"layer_{TARGET_LAYER}"]
+    layers = ["layer_9", "layer_17", "layer_22", "layer_29"]
+    print(f"Available resid_post SAE layers in {sae_repo_id}:")
+    for l in layers:
+        print(f"  {l}")
+    return layers
 
 
-def load_sae(sae_repo_id: str = SAE_REPO_ID, layer: int = TARGET_LAYER) -> dict:
+def load_sae(
+    sae_repo_id: str = SAE_REPO_ID,
+    layer: int       = TARGET_LAYER,
+    sae_type: str    = SAE_TYPE,
+    width: str       = SAE_WIDTH,
+    l0: str          = SAE_L0,
+) -> dict:
     """
-    Load the GemmaScope 2 SAE for a specific layer using sae_lens.
-
-    sae_lens handles downloading, caching, and weight extraction automatically.
-
-    SAE encoder : f(x) = ReLU(W_enc @ x + b_enc)
-    SAE decoder : x_hat = W_dec @ f(x) + b_dec
-
-    Returns a dict with keys:
-      W_enc          : (sae_dim, hidden_dim)
-      b_enc          : (sae_dim,)
-      W_dec          : (hidden_dim, sae_dim)
-      b_dec          : (hidden_dim,)
-      scaling_factor : float
-      layer          : int
-      sae_dim        : int
-      hidden_dim     : int
+    Load the GemmaScope 2 SAE for a specific layer.
     """
-    from sae_lens import SAE
+    filename   = f"{sae_type}/layer_{layer}_width_{width}_l0_{l0}/params.safetensors"
+    local_path = hf_hub_download(repo_id=sae_repo_id, filename=filename)
+    params     = load_file(local_path, device=DEVICE)
 
-    if layer is None:
-        raise ValueError("TARGET_LAYER is None — set it in phase1_models.py first.")
+    # Keys: w_enc (hidden_dim, sae_dim), w_dec (sae_dim, hidden_dim),
+    #       b_enc (sae_dim,), b_dec (hidden_dim,), threshold (sae_dim,)
+    print(f"SAE loaded - layer {layer}, sae_dim={params['w_enc'].shape[1]}, "
+          f"hidden_dim={params['w_enc'].shape[0]}")
 
-    sae_id = f"layer_{layer}_width_16k_l0_small"
-    print(f"Loading SAE  : release='{sae_repo_id}', id='{sae_id}' ...")
-
-    sae, cfg_dict, _ = SAE.from_pretrained(
-        release=sae_repo_id,
-        sae_id=sae_id,
-    )
-    sae = sae.to(DEVICE)
-
-    W_enc = sae.W_enc.detach()        # (sae_dim, hidden_dim)
-    b_enc = sae.b_enc.detach()        # (sae_dim,)
-    W_dec = sae.W_dec.detach()        # (sae_dim, hidden_dim) in sae_lens convention
-    # sae_lens stores W_dec as (sae_dim, hidden_dim); transpose to (hidden_dim, sae_dim)
-    W_dec_T = W_dec.T                 # (hidden_dim, sae_dim)
-
-    if hasattr(sae, 'b_dec') and sae.b_dec is not None:
-        b_dec = sae.b_dec.detach()    # (hidden_dim,)
-    else:
-        b_dec = torch.zeros(W_dec_T.shape[0], dtype=W_enc.dtype, device=DEVICE)
-
-    sae_weights = {
-        "W_enc":          W_enc,
-        "b_enc":          b_enc,
-        "W_dec":          W_dec_T,
-        "b_dec":          b_dec,
-        "scaling_factor": 1.0,
-        "layer":          layer,
-        "sae_dim":        W_enc.shape[0],
-        "hidden_dim":     W_enc.shape[1],
-    }
-
-    print(
-        f"  SAE loaded — hidden_dim={sae_weights['hidden_dim']}, "
-        f"sae_dim={sae_weights['sae_dim']}"
-    )
-    return sae_weights
+    return params
 
 
 # ---------------------------------------------------------------------------
@@ -215,14 +177,13 @@ def encode_with_sae(hidden_state: torch.Tensor, sae_weights: dict) -> torch.Tens
 
     Returns: (sae_dim,) sparse feature vector
     """
-    W_enc          = sae_weights["W_enc"]            # (sae_dim, hidden_dim)
-    b_enc          = sae_weights["b_enc"]            # (sae_dim,)
-    scaling_factor = sae_weights["scaling_factor"]   # float
+    w_enc     = sae_weights["w_enc"]      # (hidden_dim, sae_dim)
+    b_enc     = sae_weights["b_enc"]      # (sae_dim,)
+    threshold = sae_weights["threshold"]  # (sae_dim,)
 
-    h = hidden_state.to(W_enc.device).to(W_enc.dtype)
-    h = h * scaling_factor
+    h = hidden_state.to(w_enc.device).to(w_enc.dtype)
 
-    pre_activation = W_enc @ h + b_enc
-    features       = torch.relu(pre_activation)
+    pre_activation = h @ w_enc + b_enc           # (sae_dim,)
+    features = pre_activation * (pre_activation > threshold).float()
 
     return features
