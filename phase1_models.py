@@ -1,29 +1,33 @@
 """
-Handles loading Gemma 3 and the GemmaScope2 SAE from HuggingFace.
+Handles loading Gemma 3 and the GemmaScope 2 SAE from HuggingFace.
 Also defines which transformer layer to extract SAE features from.
 
 Relevant HuggingFace repos:
-- Gemma 3:      "google/gemma-3-<size>-it"  (e.g. gemma-3-4b-it)
-- GemmaScope 2: "google/gemma-scope-2-<size>-pt"
+  Gemma 3       : "google/gemma-3-4b-it"
+  GemmaScope 2  : loaded via sae_lens release "gemma-scope-2-4b-it-resid_post"
+                  (SAEs trained on Gemma 3 4B IT residual stream, every layer)
+
+Gemma 3 4B has 46 transformer layers (0-45).
+TARGET_LAYER = 26 is a late-middle layer; experiment with 20, 24, 28, 32, 36.
 """
 
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from huggingface_hub import list_repo_files, hf_hub_download, snapshot_download
 
 
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
 
-MODEL_ID = "google/gemma-3-4b-pt"        # swap size as needed (1b, 4b, 12b, 27b)
-SAE_REPO_ID = "google/gemma-scope-2-4b-pt"  # must match the model size above
-TARGET_LAYER = 22                         # int - the transformer layer whose SAE
-                                          # you will use for feature extraction.
-                                          # Decide this before running Phase 2.
-SAE_TYPE = "resid_post"
-SAE_WIDTH = "16k"
-SAE_L0 = "medium"
+MODEL_ID    = "google/gemma-3-4b-it"
+
+# sae_lens release name for Gemma Scope 2 — 4B instruction-tuned, residual stream
+# Full list: https://huggingface.co/google/gemma-scope-2-4b-it
+SAE_REPO_ID = "gemma-scope-2-4b-it-res-all"
+
+# Late-middle layer of Gemma 3 4B (0-indexed, 46 layers total).
+# Good starting point; sweep 20, 24, 28, 32, 36 in later experiments.
+TARGET_LAYER = 26
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -34,45 +38,109 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 def load_gemma3(model_id: str = MODEL_ID):
     """
-    Load the Gemma 3 model and tokenizer from HuggingFace.
+    Load the Gemma 3 instruction-tuned model and tokenizer from HuggingFace.
+
+    Uses bfloat16 to halve memory vs float32.
+    device_map="auto" handles single-GPU, multi-GPU, or CPU-offload automatically.
+
+    Returns: (model, tokenizer)
     """
+    print(f"Loading tokenizer: {model_id} ...")
     tokenizer = AutoTokenizer.from_pretrained(model_id)
+
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+
+    print(f"Loading model: {model_id} (bfloat16, device_map=auto) ...")
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
-        dtype=torch.bfloat16, 
-        device_map="auto"
+        dtype=torch.bfloat16,    # 'dtype' is the correct kwarg in transformers >= 4.40
+        device_map="auto",
     )
     model.eval()
-    return (model, tokenizer)
+
+    n_params = sum(p.numel() for p in model.parameters()) / 1e9
+    print(f"  -> {n_params:.2f}B parameters loaded on {DEVICE}")
+    return model, tokenizer
 
 
 # ---------------------------------------------------------------------------
-# GemmaScope2 SAE loading
+# GemmaScope 2 SAE loading — via sae_lens
 # ---------------------------------------------------------------------------
 
-def load_sae(sae_repo_id: str = SAE_REPO_ID, 
-             layer: int = TARGET_LAYER, 
-             sae_type: str = SAE_TYPE,
-             width: str = SAE_WIDTH,
-             l0: str = SAE_L0,
-             ) -> dict:
+def load_available_layers(sae_repo_id: str = SAE_REPO_ID) -> list[str]:
     """
-    Load the pre-trained GemmaScope2 SAE for a specific transformer layer.
+    Print the SAE release and target layer being used.
+    With sae_lens we don't need to enumerate files manually.
     """
-    folder = f"{sae_type}/layer_{layer}_width_{width}_l0_{l0}"
-    
-    local_path = hf_hub_download(
-        repo_id=sae_repo_id,
-        filename=f"{folder}/params.safetensors",
+    print(f"SAE release  : {sae_repo_id}")
+    print(f"Target layer : {TARGET_LAYER}")
+    print(f"SAE id : resid_post_all/layer_{TARGET_LAYER}_width_16k_l0_small")
+    print("  (widths available: 16k, 64k, 256k, 1m)")
+    print("  (L0 options: small ~10-20, medium ~30-60, large ~60-150)")
+    return [f"layer_{TARGET_LAYER}"]
+
+
+def load_sae(sae_repo_id: str = SAE_REPO_ID, layer: int = TARGET_LAYER) -> dict:
+    """
+    Load the GemmaScope 2 SAE for a specific layer using sae_lens.
+
+    sae_lens handles downloading, caching, and weight extraction automatically.
+
+    SAE encoder : f(x) = ReLU(W_enc @ x + b_enc)
+    SAE decoder : x_hat = W_dec @ f(x) + b_dec
+
+    Returns a dict with keys:
+      W_enc          : (sae_dim, hidden_dim)
+      b_enc          : (sae_dim,)
+      W_dec          : (hidden_dim, sae_dim)
+      b_dec          : (hidden_dim,)
+      scaling_factor : float
+      layer          : int
+      sae_dim        : int
+      hidden_dim     : int
+    """
+    from sae_lens import SAE
+
+    if layer is None:
+        raise ValueError("TARGET_LAYER is None — set it in phase1_models.py first.")
+
+    sae_id = f"layer_{layer}_width_16k_l0_small"
+    print(f"Loading SAE  : release='{sae_repo_id}', id='{sae_id}' ...")
+
+    sae, cfg_dict, _ = SAE.from_pretrained(
+        release=sae_repo_id,
+        sae_id=sae_id,
     )
+    sae = sae.to(DEVICE)
 
-    params = load_file(local_path, device=DEVICE)
-    
-    print("Keys in params.safetensors:", list(params.keys()))
-    print(f"SAE loaded from {folder}")
-    
-    return params
+    W_enc = sae.W_enc.detach()        # (sae_dim, hidden_dim)
+    b_enc = sae.b_enc.detach()        # (sae_dim,)
+    W_dec = sae.W_dec.detach()        # (sae_dim, hidden_dim) in sae_lens convention
+    # sae_lens stores W_dec as (sae_dim, hidden_dim); transpose to (hidden_dim, sae_dim)
+    W_dec_T = W_dec.T                 # (hidden_dim, sae_dim)
 
+    if hasattr(sae, 'b_dec') and sae.b_dec is not None:
+        b_dec = sae.b_dec.detach()    # (hidden_dim,)
+    else:
+        b_dec = torch.zeros(W_dec_T.shape[0], dtype=W_enc.dtype, device=DEVICE)
+
+    sae_weights = {
+        "W_enc":          W_enc,
+        "b_enc":          b_enc,
+        "W_dec":          W_dec_T,
+        "b_dec":          b_dec,
+        "scaling_factor": 1.0,
+        "layer":          layer,
+        "sae_dim":        W_enc.shape[0],
+        "hidden_dim":     W_enc.shape[1],
+    }
+
+    print(
+        f"  SAE loaded — hidden_dim={sae_weights['hidden_dim']}, "
+        f"sae_dim={sae_weights['sae_dim']}"
+    )
+    return sae_weights
 
 
 # ---------------------------------------------------------------------------
@@ -81,51 +149,51 @@ def load_sae(sae_repo_id: str = SAE_REPO_ID,
 
 def register_activation_hook(model, layer_index: int) -> tuple[list, object]:
     """
-    Register a forward hook on the transformer layer at `layer_index`
-    to capture the residual stream hidden state during a forward pass.
+    Register a forward hook on transformer layer `layer_index` to capture
+    the residual-stream hidden state during a forward pass.
 
-    Steps:
-    1. Identify the correct submodule path for layer `layer_index` in Gemma 3.
-       In HuggingFace Gemma 3, layers are at model.model.layers[layer_index]
-    2. Define a hook function that appends the layer's output hidden state
-       to a buffer list
-    3. Register the hook with .register_forward_hook()
-    4. Return (buffer, hook_handle)
-       - buffer: the list that will be populated with hidden states
-       - hook_handle: used to remove the hook later with hook_handle.remove()
+    In HuggingFace Gemma 3, transformer blocks live at:
+        model.model.layers[layer_index]
 
-    Usage pattern:
+    Usage:
         buffer, handle = register_activation_hook(model, TARGET_LAYER)
         with torch.no_grad():
             model(**inputs)
         hidden_state = buffer[0]   # shape: (batch, seq_len, hidden_dim)
         handle.remove()
         buffer.clear()
+
+    Returns:
+        buffer      : list populated with hidden state tensors during forward pass
+        hook_handle : call hook_handle.remove() to de-register after use
     """
-    raise NotImplementedError
+    buffer: list[torch.Tensor] = []
+
+    def _hook(module, input, output):
+        hidden = output[0] if isinstance(output, tuple) else output
+        buffer.append(hidden.detach().cpu())   # CPU to avoid GPU OOM
+
+    target_module = model.model.layers[layer_index]
+    hook_handle   = target_module.register_forward_hook(_hook)
+
+    return buffer, hook_handle
 
 
 def extract_answer_token_hidden_state(
     hidden_state: torch.Tensor,
-    answer_token_position: int = -1
+    answer_token_position: int = -1,
 ) -> torch.Tensor:
     """
-    Extract the hidden state at a specific token position from a full
-    sequence hidden state tensor.
+    Extract the activation vector at a specific token position.
 
-    - hidden_state: shape (batch, seq_len, hidden_dim)
-    - answer_token_position: which token position to extract.
-      Default -1 (last token) is a reasonable starting point for
-      decoder-only models on multiple-choice tasks.
+    Args:
+        hidden_state          : (batch, seq_len, hidden_dim)
+        answer_token_position : -1 (last token) is standard for decoder-only
+                                multiple-choice tasks.
 
-    Returns a tensor of shape (hidden_dim,) — the activation vector
-    for a single instance at the chosen position.
-
-    NOTE: The choice of token position is a design decision.
-    Discuss with your professor or experiment with a few options
-    (last token, answer token, etc.).
+    Returns: (hidden_dim,) tensor
     """
-    raise NotImplementedError
+    return hidden_state[0, answer_token_position, :]
 
 
 # ---------------------------------------------------------------------------
@@ -134,18 +202,27 @@ def extract_answer_token_hidden_state(
 
 def encode_with_sae(hidden_state: torch.Tensor, sae_weights: dict) -> torch.Tensor:
     """
-    Pass a hidden state vector through the SAE encoder to get the
-    sparse feature representation.
+    Pass one hidden-state vector through the SAE encoder.
 
-    Steps:
-    1. Apply the linear transformation: pre_activation = W_enc @ hidden_state + b_enc
-    2. Apply ReLU to get the sparse feature vector: features = ReLU(pre_activation)
-    3. Return the sparse feature vector — shape (sae_hidden_dim,)
+    Equation: features = ReLU(W_enc @ (scaling_factor * h) + b_enc)
 
-    The resulting vector is sparse: most entries will be zero.
-    The non-zero entries correspond to the interpretable SAE features
-    that are "active" for this input.
+    The result is sparse — most entries are zero.
+    Non-zero entries are the active interpretable features for this input.
 
-    This is the core feature representation you will use for deferral.
+    Args:
+        hidden_state : (hidden_dim,)
+        sae_weights  : dict from load_sae()
+
+    Returns: (sae_dim,) sparse feature vector
     """
-    raise NotImplementedError
+    W_enc          = sae_weights["W_enc"]            # (sae_dim, hidden_dim)
+    b_enc          = sae_weights["b_enc"]            # (sae_dim,)
+    scaling_factor = sae_weights["scaling_factor"]   # float
+
+    h = hidden_state.to(W_enc.device).to(W_enc.dtype)
+    h = h * scaling_factor
+
+    pre_activation = W_enc @ h + b_enc
+    features       = torch.relu(pre_activation)
+
+    return features
