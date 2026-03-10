@@ -19,15 +19,15 @@ from safetensors.torch import load_file
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-
-MODEL_ID    = "google/gemma-3-4b-it"
+# I am using 1b for local development. Switch to 4b when running on chpc
+MODEL_ID    = "google/gemma-3-1b-it"
 
 # sae_lens release name for Gemma Scope 2 — 4B instruction-tuned, residual stream
 # Full list: https://huggingface.co/google/gemma-scope-2-4b-it
-SAE_REPO_ID = "google/gemma-scope-2-4b-it"
+SAE_REPO_ID = "google/gemma-scope-2-1b-it"
 
 # Late-middle layer of Gemma 3 4B (0-indexed, 35 layers total).
-TARGET_LAYER = 22
+TARGET_LAYER = 17       # change to 22 when using 4b model
 SAE_TYPE     = "resid_post"
 SAE_WIDTH    = "16k"
 SAE_L0       = "medium"

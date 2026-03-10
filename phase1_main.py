@@ -42,7 +42,7 @@ from phase1_models import (
 # Splits: "train" (7191) / "validation" (1010) / "test" (1571)
 DATASET_NAME  = "kiddothe2b/contract-nli"
 DATASET_SPLIT = "dev"     # use validation for dev; swap to "test" for final eval
-MAX_INSTANCES = 5               # start small; increase to 1000+ for full runs
+MAX_INSTANCES = 500               # start small; increase to 1000+ for full runs
 
 # 5 temperatures → professor's robustness requirement
 # Each instance is run once per temperature; majority vote determines is_correct
