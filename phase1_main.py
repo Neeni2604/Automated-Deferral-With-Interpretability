@@ -16,7 +16,6 @@ from phase1_dataset import (
 from phase1_models import (
     load_gemma3,
     load_sae,
-    load_available_layers,
     MODEL_ID,
     SAE_REPO_ID,
     TARGET_LAYER,
@@ -44,8 +43,8 @@ SPLITS_DIR = "data/"
 
 def main():
     # Step 1: Inspect available SAE layers (run this first, then set TARGET_LAYER)
-    print("Available SAE layers:")
-    load_available_layers(SAE_REPO_ID)
+    # print("Available SAE layers:")
+    # load_available_layers(SAE_REPO_ID)
     # Once you've seen the output, set TARGET_LAYER in phase1_models.py and continue.
 
     # Step 2: Load Gemma 3

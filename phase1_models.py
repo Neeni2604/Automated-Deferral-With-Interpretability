@@ -9,20 +9,21 @@ Relevant HuggingFace repos:
 
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
+from huggingface_hub import list_repo_files, hf_hub_download, snapshot_download
 
 
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
 
-# Fill these in once you've decided on model size and layer
-MODEL_ID = "google/gemma-3-4b-it"        # swap size as needed (1b, 4b, 12b, 27b)
+MODEL_ID = "google/gemma-3-4b-pt"        # swap size as needed (1b, 4b, 12b, 27b)
 SAE_REPO_ID = "google/gemma-scope-2-4b-pt"  # must match the model size above
-TARGET_LAYER = None                       # int — the transformer layer whose SAE
+TARGET_LAYER = 22                         # int - the transformer layer whose SAE
                                           # you will use for feature extraction.
                                           # Decide this before running Phase 2.
-                                          # See load_available_layers() below
-                                          # to inspect what's available.
+SAE_TYPE = "resid_post"
+SAE_WIDTH = "16k"
+SAE_L0 = "medium"
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -38,7 +39,7 @@ def load_gemma3(model_id: str = MODEL_ID):
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
-        torch_dtype=torch.bfloat16, 
+        dtype=torch.bfloat16, 
         device_map="auto"
     )
     model.eval()
@@ -49,44 +50,29 @@ def load_gemma3(model_id: str = MODEL_ID):
 # GemmaScope2 SAE loading
 # ---------------------------------------------------------------------------
 
-def load_available_layers(sae_repo_id: str = SAE_REPO_ID) -> list[str]:
-    """
-    List all available SAE layer checkpoints in the GemmaScope2 repo.
-
-    Steps:
-    1. Use huggingface_hub.list_repo_files(sae_repo_id) to list all files
-    2. Filter for the config or weight files to identify which layers are available
-       (they are typically organized as "layer_<N>/..." subdirectories)
-    3. Print the available layer indices so you can make an informed choice
-       for TARGET_LAYER
-    4. Return the list of available layer identifiers
-
-    Call this once before committing to a TARGET_LAYER value.
-    """
-    files = huggingface_hub.list_repo_files(sae_repo_id)
-
-
-def load_sae(sae_repo_id: str = SAE_REPO_ID, layer: int = TARGET_LAYER):
+def load_sae(sae_repo_id: str = SAE_REPO_ID, 
+             layer: int = TARGET_LAYER, 
+             sae_type: str = SAE_TYPE,
+             width: str = SAE_WIDTH,
+             l0: str = SAE_L0,
+             ) -> dict:
     """
     Load the pre-trained GemmaScope2 SAE for a specific transformer layer.
-
-    Steps:
-    1. Use huggingface_hub.hf_hub_download() or snapshot_download() to
-       fetch the SAE weights for the given layer from sae_repo_id
-    2. Load the SAE encoder weights (W_enc, b_enc) and decoder weights
-       (W_dec, b_dec) — these define the sparse feature space
-    3. Move weights to DEVICE
-    4. Return the SAE weights as a dict or a small wrapper object
-
-    The SAE encoder maps: hidden_state → sparse_feature_vector
-    f(x) = ReLU(W_enc @ x + b_enc)
-
-    You will use this in Phase 2 when extracting features.
-
-    NOTE: Check the GemmaScope2 model card on HuggingFace for the exact
-    file structure and weight names: https://huggingface.co/google/gemma-scope-2
     """
-    raise NotImplementedError
+    folder = f"{sae_type}/layer_{layer}_width_{width}_l0_{l0}"
+    
+    local_path = hf_hub_download(
+        repo_id=sae_repo_id,
+        filename=f"{folder}/params.safetensors",
+    )
+
+    params = load_file(local_path, device=DEVICE)
+    
+    print("Keys in params.safetensors:", list(params.keys()))
+    print(f"SAE loaded from {folder}")
+    
+    return params
+
 
 
 # ---------------------------------------------------------------------------
