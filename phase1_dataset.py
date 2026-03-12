@@ -1,10 +1,10 @@
 """
-Handles dataset loading and robustness-aware correctness labeling.
-Each instance is labeled correct/incorrect based on majority vote
-across multiple sampling temperatures (per professor's instructions).
+Dataset loading and robustness labeling for Phase 1.
 
-Dataset: ContractNLI (stanfordnlp/contract-nli)
-Task: 3-way NLI classification over contract clauses
+We run Gemma 3 on each ContractNLI instance at 5 different temperatures and
+take a majority vote to decide whether the model "knows" the answer. Instances
+where the model consistently gets it wrong become deferral candidates in Phase 2.
+
 Labels: Entailment → A, Contradiction → B, Not Mentioned → C
 """
 
@@ -17,58 +17,35 @@ import torch
 
 
 # ---------------------------------------------------------------------------
-# Label mappings for ContractNLI
-# ---------------------------------------------------------------------------
-
-# ContractNLI exposes integer labels; map to single letters for generation.
-LABEL_INT_TO_LETTER = {0: "A", 1: "B", 2: "C"}   # Entailment / Contradiction / Not Mentioned
-LABEL_STR_TO_LETTER = {
-    "entailment":    "A",
-    "contradiction": "B",
-    "not_mentioned": "C",
-}
-
-
-# ---------------------------------------------------------------------------
-# Data structures
+# Data structure
 # ---------------------------------------------------------------------------
 
 @dataclass
 class Instance:
-    """
-    Represents a single dataset example and everything we collect about it.
-    Populated incrementally across phases.
-    """
-    id: str                          # unique identifier for the instance
-    input_text: str                  # the prompt/question fed to Gemma 3
-    gold_label: str                  # ground-truth answer: "A", "B", or "C"
+    """One ContractNLI example, plus everything we collect about it."""
 
-    # Filled in during robustness labeling (Phase 1)
-    predictions: list[str] = field(default_factory=list)
-    # One prediction per temperature run, e.g. ["A", "A", "B", "A", "C"]
+    id: str           # e.g. "dev_42"
+    input_text: str   # formatted prompt sent to Gemma 3
+    gold_label: str   # correct answer: "A", "B", or "C"
 
-    log_probs: list[float] = field(default_factory=list)
-    # Log-probability of the predicted answer token for each run
+    # filled in by RobustnessLabeler
+    predictions: list[str] = field(default_factory=list)  # one per temperature
+    log_probs: list[float] = field(default_factory=list)  # log-prob of predicted token
 
+    # True  = model usually gets this right (keep)
+    # False = model usually gets this wrong (defer)
     is_correct: Optional[bool] = None
-    # Final majority-vote correctness label:
-    #   True  → model handles this correctly most of the time
-    #   False → model fails consistently (candidate for deferral)
 
 
 # ---------------------------------------------------------------------------
-# Dataset loading — ContractNLI
+# Dataset loading
 # ---------------------------------------------------------------------------
 
-def _format_contractnli_prompt(premise: str, hypothesis: str) -> str:
-    """
-    Format a ContractNLI row as a multiple-choice prompt.
-    Gemma 3 is expected to emit a single letter: A, B, or C.
-    Premise is truncated to avoid blowing the context window.
-    """
-    max_chars = 1500
-    if len(premise) > max_chars:
-        premise = premise[:max_chars] + "..."
+def _format_prompt(premise: str, hypothesis: str) -> str:
+    """Build the multiple-choice prompt we send to Gemma 3."""
+    # truncate long contracts so we don't blow the context window
+    if len(premise) > 1500:
+        premise = premise[:1500] + "..."
 
     return (
         "Read the contract excerpt and the hypothesis, then choose the correct label.\n\n"
@@ -81,86 +58,70 @@ def _format_contractnli_prompt(premise: str, hypothesis: str) -> str:
     )
 
 
-def _normalize_label(raw_label) -> str:
-    """Convert int or str label from HF dataset into A / B / C."""
-    if isinstance(raw_label, int):
-        return LABEL_INT_TO_LETTER.get(raw_label, "")
-    if isinstance(raw_label, str):
-        return LABEL_STR_TO_LETTER.get(raw_label.lower().replace(" ", "_"), "")
-    return ""
-
-
 def load_dataset(dataset_name: str, split: str, max_instances: int) -> list[Instance]:
     """
-    Load ContractNLI from the kiddothe2b/contract-nli zip file on HuggingFace.
-
-    The dataset uses a legacy loading script incompatible with modern HF datasets,
-    so we download the raw zip and parse the JSONL directly.
-
-    Source  : kiddothe2b/contract-nli  (contract_nli.zip → contract_nli_v1.jsonl)
-    Splits  : "train" / "validation" / "test"
-    Columns : premise, hypothesis, label (str: entailment/neutral/contradiction), subset
+    Load ContractNLI from HuggingFace.
+    split must be one of: "train", "dev", "test"
     """
     import zipfile
     import json as _json
     from huggingface_hub import hf_hub_download
 
-    print(f"Loading ContractNLI (kiddothe2b/contract-nli) [{split}] ...")
-    zip_path = hf_hub_download(
-        'kiddothe2b/contract-nli',
-        'contract_nli.zip',
-        repo_type='dataset',
-    )
+    label_map = {
+        "entailment":    "A",
+        "contradiction": "B",
+        "neutral":       "C",
+        "not_mentioned": "C",
+    }
 
-    instances: list[Instance] = []
-    global_idx = 0  # index across all rows (for stable IDs)
+    print(f"Loading ContractNLI (kiddothe2b/contract-nli) [{split}] ...")
+    zip_path = hf_hub_download("kiddothe2b/contract-nli", "contract_nli.zip", repo_type="dataset")
+
+    instances = []
+    global_idx = 0  # used for stable IDs across the full file
 
     with zipfile.ZipFile(zip_path) as z:
-        with z.open('contract_nli_v1.jsonl') as f:
+        with z.open("contract_nli_v1.jsonl") as f:
             for line in f:
                 row = _json.loads(line)
                 global_idx += 1
 
-                if row.get('subset') != split:
+                if row.get("subset") != split:
                     continue
 
-                premise    = str(row.get('premise', ''))
-                hypothesis = str(row.get('hypothesis', ''))
-                raw_label  = row.get('label', '')
-
-                # Map "neutral" → C (the dataset uses "neutral" not "not_mentioned")
-                label_map = {
-                    'entailment':    'A',
-                    'contradiction': 'B',
-                    'neutral':       'C',
-                    'not_mentioned': 'C',
-                }
-                gold_letter = label_map.get(str(raw_label).lower().strip(), '')
-                if not gold_letter:
+                gold = label_map.get(str(row.get("label", "")).lower().strip(), "")
+                if not gold:
                     continue
 
                 instances.append(Instance(
                     id=f"{split}_{global_idx}",
-                    input_text=_format_contractnli_prompt(premise, hypothesis),
-                    gold_label=gold_letter,
+                    input_text=_format_prompt(
+                        str(row.get("premise", "")),
+                        str(row.get("hypothesis", "")),
+                    ),
+                    gold_label=gold,
                 ))
 
                 if max_instances and len(instances) >= max_instances:
                     break
 
-    print(f"  -> {len(instances)} instances loaded from split='{split}'")
+    print(f"  -> {len(instances)} instances loaded")
     return instances
 
+
+# ---------------------------------------------------------------------------
+# Train / val / test split
+# ---------------------------------------------------------------------------
 
 def train_val_test_split(
     instances: list[Instance],
     train_ratio: float = 0.7,
-    val_ratio: float   = 0.1,
+    val_ratio: float = 0.1,
     seed: int = 42,
 ) -> tuple[list[Instance], list[Instance], list[Instance]]:
     """
-    Stratified split by is_correct so the error rate is balanced across
-    train / val / test.  Uses a fixed seed for reproducibility.
+    Stratified split that keeps the correct/incorrect ratio balanced across
+    train, val, and test. 
     """
     rng = random.Random(seed)
 
@@ -168,12 +129,11 @@ def train_val_test_split(
     incorrect = [i for i in instances if i.is_correct is False]
     unlabeled = [i for i in instances if i.is_correct is None]
 
-    def _split(items: list) -> tuple[list, list, list]:
+    def _split(items):
         items = items[:]
         rng.shuffle(items)
-        n       = len(items)
-        n_train = int(n * train_ratio)
-        n_val   = int(n * val_ratio)
+        n_train = int(len(items) * train_ratio)
+        n_val   = int(len(items) * val_ratio)
         return items[:n_train], items[n_train:n_train + n_val], items[n_train + n_val:]
 
     tr_c, va_c, te_c = _split(correct)
@@ -184,9 +144,11 @@ def train_val_test_split(
     val   = va_c + va_i + va_u
     test  = te_c + te_i + te_u
 
-    rng.shuffle(train); rng.shuffle(val); rng.shuffle(test)
+    rng.shuffle(train)
+    rng.shuffle(val)
+    rng.shuffle(test)
 
-    print(f"Split → train={len(train)}, val={len(val)}, test={len(test)}")
+    print(f"Split -> train={len(train)}, val={len(val)}, test={len(test)}")
     return train, val, test
 
 
@@ -196,49 +158,29 @@ def train_val_test_split(
 
 class RobustnessLabeler:
     """
-    Runs Gemma 3 multiple times per instance at different sampling temperatures
-    and assigns a majority-vote correctness label to each instance.
+    Runs Gemma 3 at multiple temperatures per instance and labels each one
+    correct/incorrect by majority vote.
     """
 
-    def __init__(
-        self,
-        model,
-        tokenizer,
-        temperatures: list[float],
-        majority_threshold: float = 0.5,
-    ):
-        self.model             = model
-        self.tokenizer         = tokenizer
-        self.temperatures      = temperatures
+    def __init__(self, model, tokenizer, temperatures, majority_threshold=0.5):
+        self.model = model
+        self.tokenizer = tokenizer
+        self.temperatures = temperatures
         self.majority_threshold = majority_threshold
-        self.device            = next(model.parameters()).device
-
-    # ------------------------------------------------------------------
+        self.device = next(model.parameters()).device
 
     def run_single(self, input_text: str, temperature: float) -> tuple[str, float]:
         """
-        Run one forward pass at the given temperature using the Gemma 3 chat template.
-
-        Gemma 3 IT requires the chat template to be applied — without it the model
-        does not follow instructions and generates garbage tokens instead of A/B/C.
-
-        Returns:
-          predicted_answer : single letter string ("A", "B", "C", or "?")
-          log_prob         : log-prob of the first generated token
+        One forward pass at a given temperature. Returns the predicted letter
+        (A/B/C or ? if unrecognized) and the log-prob of the first generated token.
         """
-        # Apply Gemma 3 IT chat template
         messages = [{"role": "user", "content": input_text}]
         prompt = self.tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True,
+            messages, tokenize=False, add_generation_prompt=True
         )
 
         inputs = self.tokenizer(
-            prompt,
-            return_tensors="pt",
-            truncation=True,
-            max_length=2048,
+            prompt, return_tensors="pt", truncation=True, max_length=2048
         ).to(self.device)
 
         prompt_len = inputs["input_ids"].shape[1]
@@ -246,53 +188,38 @@ class RobustnessLabeler:
         with torch.no_grad():
             output = self.model.generate(
                 **inputs,
-                max_new_tokens=3,             # allow a few tokens; model may emit leading whitespace
+                max_new_tokens=3,   # a few tokens in case of leading whitespace
                 do_sample=True,
                 temperature=temperature,
                 return_dict_in_generate=True,
-                output_scores=True,           # logit distributions per step
+                output_scores=True,
                 pad_token_id=self.tokenizer.eos_token_id,
             )
 
-        # Decode only the newly generated tokens (exclude prompt)
         new_tokens = output.sequences[0, prompt_len:]
         raw = self.tokenizer.decode(new_tokens, skip_special_tokens=True).strip().upper()
+        predicted = next((c for c in raw if c in "ABC"), "?")
 
-        # Extract first A/B/C from the decoded output
-        predicted_answer = next((c for c in raw if c in "ABC"), "?")
+        first_token_id = output.sequences[0, prompt_len]
+        log_probs = torch.log_softmax(output.scores[0][0], dim=-1)
+        log_prob  = log_probs[first_token_id].item()
 
-        # Log-prob of the very first generated token
-        first_token_id    = output.sequences[0, prompt_len]
-        log_probs_all     = torch.log_softmax(output.scores[0][0], dim=-1)
-        log_prob          = log_probs_all[first_token_id].item()
-
-        return predicted_answer, log_prob
-
-    # ------------------------------------------------------------------
+        return predicted, log_prob
 
     def label_instance(self, instance: Instance) -> Instance:
-        """
-        Run all temperatures on one Instance; compute majority-vote is_correct.
-        """
+        """Run all temperatures on one instance and set is_correct by majority vote."""
         for temp in self.temperatures:
             pred, lp = self.run_single(instance.input_text, temp)
             instance.predictions.append(pred)
             instance.log_probs.append(lp)
 
-        total         = len(self.temperatures)
-        n_correct     = sum(p == instance.gold_label for p in instance.predictions)
-        instance.is_correct = (n_correct / total) > self.majority_threshold
-
+        n_correct = sum(p == instance.gold_label for p in instance.predictions)
+        instance.is_correct = (n_correct / len(self.temperatures)) > self.majority_threshold
         return instance
 
-    # ------------------------------------------------------------------
-
     def label_dataset(self, instances: list[Instance]) -> list[Instance]:
-        """
-        Label every instance; prints progress every 50 items.
-        """
-        labeled: list[Instance] = []
-
+        """Label all instances; prints progress every 50."""
+        labeled = []
         for i, instance in enumerate(instances):
             labeled.append(self.label_instance(instance))
 
@@ -309,7 +236,7 @@ class RobustnessLabeler:
 
 
 # ---------------------------------------------------------------------------
-# Helper functions
+# Save / load helpers
 # ---------------------------------------------------------------------------
 
 def _to_dict(inst: Instance) -> dict:
@@ -335,31 +262,23 @@ def _from_dict(d: dict) -> Instance:
 
 
 def save_instances(instances: list[Instance], path: str) -> None:
-    """Serialize to JSON (preferred over pickle for readability)."""
     import os
-    parent = os.path.dirname(path)
-    if parent:
-        os.makedirs(parent, exist_ok=True)
-
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
-        json.dump([_to_dict(inst) for inst in instances], f, indent=2, ensure_ascii=False)
-    print(f"Saved {len(instances)} instances → {path}")
+        json.dump([_to_dict(i) for i in instances], f, indent=2, ensure_ascii=False)
+    print(f"Saved {len(instances)} instances -> {path}")
 
 
 def load_instances(path: str) -> list[Instance]:
-    """Deserialize instances previously saved with save_instances()."""
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
     instances = [_from_dict(d) for d in data]
-    print(f"Loaded {len(instances)} instances ← {path}")
+    print(f"Loaded {len(instances)} instances <- {path}")
     return instances
 
 
 def print_label_statistics(instances: list[Instance]) -> None:
-    """
-    Summary of the labeled dataset.
-    Sanity check: correct instances should have higher (less-negative) avg log_prob.
-    """
+    """Quick sanity check: correct instances should have higher avg log-prob."""
     import numpy as np
 
     total     = len(instances)
@@ -374,17 +293,13 @@ def print_label_statistics(instances: list[Instance]) -> None:
     print(f"\n{bar}\n  LABEL STATISTICS\n{bar}")
     print(f"  Total instances   : {total}")
     print(f"  Correct  (True)   : {n_correct:>5}  ({100 * n_correct / total:.1f}%)")
-    print(f"  Incorrect (False) : {n_wrong:>5}  ({100 * n_wrong  / total:.1f}%)")
+    print(f"  Incorrect (False) : {n_wrong:>5}  ({100 * n_wrong / total:.1f}%)")
     if n_none:
         print(f"  Unlabeled (None)  : {n_none:>5}")
     print()
-
     if correct_lps:
-        print(f"  Avg log-prob — correct   : {np.mean(correct_lps):.4f}  "
-              f"(std {np.std(correct_lps):.4f})")
+        print(f"  Avg log-prob — correct   : {np.mean(correct_lps):.4f}  (std {np.std(correct_lps):.4f})")
     if wrong_lps:
-        print(f"  Avg log-prob — incorrect : {np.mean(wrong_lps):.4f}  "
-              f"(std {np.std(wrong_lps):.4f})")
-
-    print("  (higher / less-negative log-prob → model was more confident)")
+        print(f"  Avg log-prob — incorrect : {np.mean(wrong_lps):.4f}  (std {np.std(wrong_lps):.4f})")
+    print("  (higher = more confident)")
     print(f"{bar}\n")
