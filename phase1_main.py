@@ -1,18 +1,22 @@
 """
-Entry point for Phase 1. Run this file to:
-  1. Load ContractNLI dataset
-  2. Load Gemma 3 and confirm the GemmaScope 2 SAE loads
-  3. Label all instances with robustness-aware correctness labels
-     (majority-vote across 5 sampling temperatures)
-  4. Collect per-instance confidence scores and log-probs (baseline deferral signals)
-  5. Save results and train/val/test splits to disk
+Phase 1 entry point.
+
+Runs the full data collection pipeline:
+  1. Sanity-check available SAE layers
+  2. Load Gemma 3
+  3. Load GemmaScope 2 SAE
+  4. Load ContractNLI dataset
+  5. Label each instance correct/incorrect via majority vote across 5 temperatures
+  6. Print statistics
+  7. Save labeled instances to disk
+  8. Save train/val/test splits
 
 Usage:
   python phase1_main.py
 
 Prerequisites:
   pip install -r requirements.txt
-  huggingface-cli login   # Gemma 3 is a gated model
+  huggingface-cli login   # Gemma 3 is gated
 """
 
 from phase1_dataset import (
@@ -34,25 +38,20 @@ from phase1_models import (
 
 
 # ---------------------------------------------------------------------------
-# Config — edit these as needed
+# Config
 # ---------------------------------------------------------------------------
 
-# ContractNLI: 3-way NLI over contract clauses
-# HF identifier: "kiddothe2b/contract-nli"
-# Splits: "train" (7191) / "validation" (1010) / "test" (1571)
 DATASET_NAME  = "kiddothe2b/contract-nli"
-DATASET_SPLIT = "dev"     # use validation for dev; swap to "test" for final eval
-MAX_INSTANCES = 500               # start small; increase to 1000+ for full runs
+DATASET_SPLIT = "dev"        # dev = validation split in this dataset
+MAX_INSTANCES = 500
 
-# 5 temperatures → professor's robustness requirement
-# Each instance is run once per temperature; majority vote determines is_correct
 TEMPERATURES       = [0.3, 0.7, 1.0, 1.3, 1.7]
-MAJORITY_THRESHOLD = 0.5     # must be correct on >50% of runs
+MAJORITY_THRESHOLD = 0.5     # correct on >50% of runs → is_correct = True
 
 OUTPUT_PATH = "data/labeled_instances.json"
 SPLITS_DIR  = "data/"
 
-# Set SKIP_LABELING = True after a full run to reload from disk and skip re-labeling
+# Set True after the first full run to skip labeling and reload from disk
 SKIP_LABELING = False
 
 
@@ -61,46 +60,33 @@ SKIP_LABELING = False
 # ---------------------------------------------------------------------------
 
 def main():
-    # ------------------------------------------------------------------
-    # Step 1: Inspect available SAE layers — run once, then set TARGET_LAYER
-    # ------------------------------------------------------------------
+    # Step 1 — check what SAE layers are available
     print("=" * 60)
     print("STEP 1 — Available SAE layers")
     print("=" * 60)
     load_available_layers(SAE_REPO_ID)
-    # After seeing the output, set TARGET_LAYER in phase1_models.py.
-    # Default is 26 (late-middle layer for Gemma 3 4B).
-    # Try 20, 24, 28, 32, 36 in later experiments.
 
-    # ------------------------------------------------------------------
-    # Step 2: Load Gemma 3
-    # ------------------------------------------------------------------
+    # Step 2 — load Gemma 3
     print("\n" + "=" * 60)
     print("STEP 2 — Load Gemma 3")
     print("=" * 60)
     model, tokenizer = load_gemma3(MODEL_ID)
 
-    # ------------------------------------------------------------------
-    # Step 3: Load GemmaScope 2 SAE (smoke-test; used heavily in Phase 2)
-    # ------------------------------------------------------------------
+    # Step 3 — load SAE (smoke test; SAE is used heavily in Phase 2)
     print("\n" + "=" * 60)
     print(f"STEP 3 — Load GemmaScope 2 SAE (layer {TARGET_LAYER})")
     print("=" * 60)
     sae_weights = load_sae(sae_repo_id=SAE_REPO_ID, layer=TARGET_LAYER)
     print("SAE loaded successfully.")
 
-    # ------------------------------------------------------------------
-    # Step 4: Load dataset
-    # ------------------------------------------------------------------
+    # Step 4 — load dataset
     print("\n" + "=" * 60)
     print("STEP 4 — Load ContractNLI dataset")
     print("=" * 60)
     instances = load_dataset(DATASET_NAME, DATASET_SPLIT, MAX_INSTANCES)
     print(f"Loaded {len(instances)} instances.")
 
-    # ------------------------------------------------------------------
-    # Step 5: Robustness labeling (or reload from disk)
-    # ------------------------------------------------------------------
+    # Step 5 — robustness labeling
     print("\n" + "=" * 60)
     print("STEP 5 — Robustness labeling")
     print("=" * 60)
@@ -117,19 +103,13 @@ def main():
         )
         labeled_instances = labeler.label_dataset(instances)
 
-    # ------------------------------------------------------------------
-    # Step 6: Print statistics (sanity-check labels and log-probs)
-    # ------------------------------------------------------------------
+    # Step 6 — print statistics
     print_label_statistics(labeled_instances)
 
-    # ------------------------------------------------------------------
-    # Step 7: Save labeled instances — always checkpoint before splitting
-    # ------------------------------------------------------------------
+    # Step 7 — save full labeled dataset
     save_instances(labeled_instances, OUTPUT_PATH)
 
-    # ------------------------------------------------------------------
-    # Step 8: Train / val / test split (stratified by is_correct)
-    # ------------------------------------------------------------------
+    # Step 8 — stratified train/val/test split
     print("\n" + "=" * 60)
     print("STEP 8 — Train / val / test split")
     print("=" * 60)
