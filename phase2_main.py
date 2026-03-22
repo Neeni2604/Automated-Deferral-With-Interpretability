@@ -27,7 +27,6 @@ from phase2_extraction import (
 )
 
 
-# CONFIG
 INSTANCES_PATH   = "data/labeled_instances.json"
 OUTPUT_DIR       = "data/"
 CHECKPOINT_EVERY = 50

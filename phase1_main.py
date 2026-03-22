@@ -37,10 +37,6 @@ from phase1_models import (
 )
 
 
-# ---------------------------------------------------------------------------
-# Config
-# ---------------------------------------------------------------------------
-
 DATASET_NAME  = "kiddothe2b/contract-nli"
 DATASET_SPLIT = "dev"        # dev = validation split in this dataset
 MAX_INSTANCES = 500
@@ -54,10 +50,6 @@ SPLITS_DIR  = "data/"
 # Set True after the first full run to skip labeling and reload from disk
 SKIP_LABELING = False
 
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 def main():
     # Step 1 — check what SAE layers are available

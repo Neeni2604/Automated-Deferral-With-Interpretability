@@ -16,10 +16,6 @@ from typing import Optional
 import torch
 
 
-# ---------------------------------------------------------------------------
-# Data structure
-# ---------------------------------------------------------------------------
-
 @dataclass
 class Instance:
     """One ContractNLI example, plus everything we collect about it."""
@@ -28,18 +24,13 @@ class Instance:
     input_text: str   # formatted prompt sent to Gemma 3
     gold_label: str   # correct answer: "A", "B", or "C"
 
-    # filled in by RobustnessLabeler
-    predictions: list[str] = field(default_factory=list)  # one per temperature
-    log_probs: list[float] = field(default_factory=list)  # log-prob of predicted token
+    predictions: list[str] = field(default_factory=list)
+    log_probs: list[float] = field(default_factory=list)
 
     # True  = model usually gets this right (keep)
     # False = model usually gets this wrong (defer)
     is_correct: Optional[bool] = None
 
-
-# ---------------------------------------------------------------------------
-# Dataset loading
-# ---------------------------------------------------------------------------
 
 def _format_prompt(premise: str, hypothesis: str) -> str:
     """Build the multiple-choice prompt we send to Gemma 3."""
@@ -109,10 +100,6 @@ def load_dataset(dataset_name: str, split: str, max_instances: int) -> list[Inst
     return instances
 
 
-# ---------------------------------------------------------------------------
-# Train / val / test split
-# ---------------------------------------------------------------------------
-
 def train_val_test_split(
     instances: list[Instance],
     train_ratio: float = 0.7,
@@ -152,9 +139,6 @@ def train_val_test_split(
     return train, val, test
 
 
-# ---------------------------------------------------------------------------
-# Robustness labeling
-# ---------------------------------------------------------------------------
 
 class RobustnessLabeler:
     """
@@ -235,9 +219,7 @@ class RobustnessLabeler:
         return labeled
 
 
-# ---------------------------------------------------------------------------
 # Save / load helpers
-# ---------------------------------------------------------------------------
 
 def _to_dict(inst: Instance) -> dict:
     return {

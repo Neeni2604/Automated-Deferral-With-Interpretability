@@ -2,7 +2,7 @@
 Model loading utilities for Phase 1.
 
 Handles Gemma 3 and the GemmaScope 2 SAE. The SAE lets us decompose
-Gemma's internal activations into sparse, interpretable features — these
+Gemma's internal activations into sparse, interpretable features - these
 become the input to our deferral classifier in Phase 2.
 
 NOTE: MODEL_ID and SAE_REPO_ID below are set for the 1B model for local
@@ -15,9 +15,6 @@ from huggingface_hub import hf_hub_download
 from safetensors.torch import load_file
 
 
-# ---------------------------------------------------------------------------
-# Config — swap these when moving from local dev → CHPC
-# ---------------------------------------------------------------------------
 
 MODEL_ID     = "google/gemma-3-1b-it"       # change to gemma-3-4b-it on CHPC
 SAE_REPO_ID  = "google/gemma-scope-2-1b-it" # change to gemma-scope-2-4b-it on CHPC
@@ -29,9 +26,6 @@ SAE_L0       = "medium"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 
-# ---------------------------------------------------------------------------
-# Gemma 3
-# ---------------------------------------------------------------------------
 
 def load_gemma3(model_id: str = MODEL_ID):
     """Load Gemma 3 IT in bfloat16. Returns (model, tokenizer)."""
@@ -53,9 +47,6 @@ def load_gemma3(model_id: str = MODEL_ID):
     return model, tokenizer
 
 
-# ---------------------------------------------------------------------------
-# GemmaScope 2 SAE
-# ---------------------------------------------------------------------------
 
 def load_available_layers(sae_repo_id: str = SAE_REPO_ID) -> list[str]:
     """Print the resid_post layers available in this SAE repo."""
@@ -89,21 +80,10 @@ def load_sae(
     return params
 
 
-# ---------------------------------------------------------------------------
-# Activation hooks
-# ---------------------------------------------------------------------------
 
 def register_activation_hook(model, layer_index: int) -> tuple[list, object]:
     """
     Hook into a transformer layer to capture the residual stream.
-
-    Usage:
-        buffer, handle = register_activation_hook(model, TARGET_LAYER)
-        with torch.no_grad():
-            model(**inputs)
-        hidden = buffer[0]  # (batch, seq_len, hidden_dim)
-        handle.remove()
-        buffer.clear()
     """
     buffer = []
 
@@ -122,16 +102,11 @@ def extract_answer_token_hidden_state(
     """
     Pull out the activation vector at one token position.
     Default is -1 (last token), which is the standard choice for
-    decoder-only multiple-choice — the model has seen the full prompt here.
-
-    Returns: (hidden_dim,) tensor
+    decoder-only multiple-choice - the model has seen the full prompt here.
     """
     return hidden_state[0, answer_token_position, :]
 
 
-# ---------------------------------------------------------------------------
-# SAE encoding
-# ---------------------------------------------------------------------------
 
 def encode_with_sae(hidden_state: torch.Tensor, sae_weights: dict) -> torch.Tensor:
     """
