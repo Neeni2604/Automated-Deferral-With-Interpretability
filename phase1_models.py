@@ -112,10 +112,7 @@ def encode_with_sae(hidden_state: torch.Tensor, sae_weights: dict) -> torch.Tens
     """
     Run a hidden state through the SAE encoder to get a sparse feature vector.
 
-    Uses JumpReLU (threshold-based activation) rather than plain ReLU —
-    this is what GemmaScope 2 uses.
-
-    Returns: (sae_dim,) tensor — sparse, most values are 0.
+    Uses JumpReLU (threshold-based activation) rather than plain ReLU. This is what GemmaScope 2 uses.
     """
     w_enc     = sae_weights["w_enc"]      # (hidden_dim, sae_dim)
     b_enc     = sae_weights["b_enc"]      # (sae_dim,)
