@@ -27,8 +27,8 @@ from phase2_extraction import (
 )
 
 
-INSTANCES_PATH   = "data/labeled_instances.json"
-OUTPUT_DIR       = "data/"
+INSTANCES_PATH = "data/labeled_instances.json"
+OUTPUT_DIR = "data/"
 CHECKPOINT_EVERY = 50
 SKIP_EXTRACTION  = False        # Set True after a completed run to skip re-extraction
 

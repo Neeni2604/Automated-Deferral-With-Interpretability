@@ -42,9 +42,9 @@ def _format_prompt(premise: str, hypothesis: str) -> str:
         "Read the contract excerpt and the hypothesis, then choose the correct label.\n\n"
         f"Contract excerpt:\n{premise}\n\n"
         f"Hypothesis: {hypothesis}\n\n"
-        "A) Entailment   — the contract supports the hypothesis\n"
-        "B) Contradiction — the contract contradicts the hypothesis\n"
-        "C) Not Mentioned — the contract does not address the hypothesis\n\n"
+        "A) Entailment: the contract supports the hypothesis\n"
+        "B) Contradiction: the contract contradicts the hypothesis\n"
+        "C) Not Mentioned: the contract does not address the hypothesis\n\n"
         "Answer (A, B, or C):"
     )
 
@@ -59,9 +59,9 @@ def load_dataset(dataset_name: str, split: str, max_instances: int) -> list[Inst
     from huggingface_hub import hf_hub_download
 
     label_map = {
-        "entailment":    "A",
+        "entailment": "A",
         "contradiction": "B",
-        "neutral":       "C",
+        "neutral": "C",
         "not_mentioned": "C",
     }
 
@@ -120,7 +120,7 @@ def train_val_test_split(
         items = items[:]
         rng.shuffle(items)
         n_train = int(len(items) * train_ratio)
-        n_val   = int(len(items) * val_ratio)
+        n_val = int(len(items) * val_ratio)
         return items[:n_train], items[n_train:n_train + n_val], items[n_train + n_val:]
 
     tr_c, va_c, te_c = _split(correct)
@@ -128,8 +128,8 @@ def train_val_test_split(
     tr_u, va_u, te_u = _split(unlabeled)
 
     train = tr_c + tr_i + tr_u
-    val   = va_c + va_i + va_u
-    test  = te_c + te_i + te_u
+    val = va_c + va_i + va_u
+    test = te_c + te_i + te_u
 
     rng.shuffle(train)
     rng.shuffle(val)
@@ -223,23 +223,23 @@ class RobustnessLabeler:
 
 def _to_dict(inst: Instance) -> dict:
     return {
-        "id":          inst.id,
-        "input_text":  inst.input_text,
-        "gold_label":  inst.gold_label,
+        "id": inst.id,
+        "input_text": inst.input_text,
+        "gold_label": inst.gold_label,
         "predictions": inst.predictions,
-        "log_probs":   inst.log_probs,
-        "is_correct":  inst.is_correct,
+        "log_probs": inst.log_probs,
+        "is_correct": inst.is_correct,
     }
 
 
 def _from_dict(d: dict) -> Instance:
     return Instance(
-        id          = d["id"],
-        input_text  = d["input_text"],
-        gold_label  = d["gold_label"],
+        id = d["id"],
+        input_text = d["input_text"],
+        gold_label = d["gold_label"],
         predictions = d.get("predictions", []),
-        log_probs   = d.get("log_probs", []),
-        is_correct  = d.get("is_correct"),
+        log_probs = d.get("log_probs", []),
+        is_correct = d.get("is_correct"),
     )
 
 
@@ -263,25 +263,25 @@ def print_label_statistics(instances: list[Instance]) -> None:
     """Quick sanity check: correct instances should have higher avg log-prob."""
     import numpy as np
 
-    total     = len(instances)
+    total = len(instances)
     n_correct = sum(1 for i in instances if i.is_correct is True)
-    n_wrong   = sum(1 for i in instances if i.is_correct is False)
-    n_none    = total - n_correct - n_wrong
+    n_wrong = sum(1 for i in instances if i.is_correct is False)
+    n_none = total - n_correct - n_wrong
 
     correct_lps = [lp for i in instances if i.is_correct is True  for lp in i.log_probs]
-    wrong_lps   = [lp for i in instances if i.is_correct is False for lp in i.log_probs]
+    wrong_lps = [lp for i in instances if i.is_correct is False for lp in i.log_probs]
 
     bar = "=" * 58
     print(f"\n{bar}\n  LABEL STATISTICS\n{bar}")
-    print(f"  Total instances   : {total}")
-    print(f"  Correct  (True)   : {n_correct:>5}  ({100 * n_correct / total:.1f}%)")
+    print(f"  Total instances : {total}")
+    print(f"  Correct  (True) : {n_correct:>5}  ({100 * n_correct / total:.1f}%)")
     print(f"  Incorrect (False) : {n_wrong:>5}  ({100 * n_wrong / total:.1f}%)")
     if n_none:
         print(f"  Unlabeled (None)  : {n_none:>5}")
     print()
     if correct_lps:
-        print(f"  Avg log-prob — correct   : {np.mean(correct_lps):.4f}  (std {np.std(correct_lps):.4f})")
+        print(f"  Avg log-prob - correct : {np.mean(correct_lps):.4f}  (std {np.std(correct_lps):.4f})")
     if wrong_lps:
-        print(f"  Avg log-prob — incorrect : {np.mean(wrong_lps):.4f}  (std {np.std(wrong_lps):.4f})")
+        print(f"  Avg log-prob - incorrect : {np.mean(wrong_lps):.4f}  (std {np.std(wrong_lps):.4f})")
     print("  (higher = more confident)")
     print(f"{bar}\n")

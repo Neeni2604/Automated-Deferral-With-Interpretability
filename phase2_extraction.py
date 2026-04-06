@@ -88,8 +88,8 @@ def extract_all(
     Extract SAE feature vectors for all instances.
     """
     feature_list = []
-    label_list   = []
-    id_list      = []
+    label_list = []
+    id_list = []
 
     labeled = [inst for inst in instances if inst.is_correct is not None]
     print(f"Extracting features for {len(labeled)} labeled instances "
@@ -106,7 +106,7 @@ def extract_all(
 
 
         if (i + 1) % 50 == 0 or (i + 1) == len(labeled):
-            n_done   = i + 1
+            n_done = i + 1
             n_correct = sum(label_list)
             print(
                 f"  [{n_done}/{len(labeled)}]  "
@@ -118,7 +118,7 @@ def extract_all(
             print(f"  Checkpoint saved → {checkpoint_path}")
 
     feature_matrix = np.stack(feature_list, axis=0)   # (n_instances, sae_dim)
-    labels         = np.array(label_list, dtype=bool)  # (n_instances,)
+    labels = np.array(label_list, dtype=bool)  # (n_instances,)
 
     return feature_matrix, labels, id_list
 
@@ -156,7 +156,7 @@ def load_features(
     Load previously saved feature matrix, labels, and instance ids
     """
     feature_matrix = np.load(output_dir + "feature_matrix.npy")
-    labels         = np.load(output_dir + "labels.npy")
+    labels = np.load(output_dir + "labels.npy")
 
     with open(output_dir + "instance_ids.json") as f:
         instance_ids = json.load(f)
@@ -180,20 +180,20 @@ def print_feature_statistics(
     """
     n_instances, sae_dim = feature_matrix.shape
     nonzero_counts = (feature_matrix > 0).sum(axis=1)  # per instance
-    sparsity       = 1.0 - (nonzero_counts / sae_dim)
+    sparsity = 1.0 - (nonzero_counts / sae_dim)
 
-    correct_mean   = feature_matrix[labels].mean()
+    correct_mean = feature_matrix[labels].mean()
     incorrect_mean = feature_matrix[~labels].mean()
 
     bar = "=" * 58
     print(f"\n{bar}\n  FEATURE STATISTICS\n{bar}")
-    print(f"  Instances     : {n_instances}")
-    print(f"  SAE dim       : {sae_dim}")
+    print(f"  Instances : {n_instances}")
+    print(f"  SAE dim : {sae_dim}")
     print(f"  Avg active features / instance : {nonzero_counts.mean():.1f}  "
           f"(out of {sae_dim})")
-    print(f"  Avg sparsity                   : {sparsity.mean():.4f}")
-    print(f"  Mean activation - correct      : {correct_mean:.6f}")
-    print(f"  Mean activation - incorrect    : {incorrect_mean:.6f}")
+    print(f"  Avg sparsity : {sparsity.mean():.4f}")
+    print(f"  Mean activation - correct : {correct_mean:.6f}")
+    print(f"  Mean activation - incorrect : {incorrect_mean:.6f}")
     print(f"{bar}\n")
 
 

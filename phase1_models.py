@@ -61,18 +61,18 @@ def load_available_layers(sae_repo_id: str = SAE_REPO_ID) -> list[str]:
 
 def load_sae(
     sae_repo_id: str = SAE_REPO_ID,
-    layer: int       = TARGET_LAYER,
-    sae_type: str    = SAE_TYPE,
-    width: str       = SAE_WIDTH,
-    l0: str          = SAE_L0,
+    layer: int = TARGET_LAYER,
+    sae_type: str = SAE_TYPE,
+    width: str = SAE_WIDTH,
+    l0: str = SAE_L0,
 ) -> dict:
     """
     Download and load SAE weights for a specific layer from HuggingFace.
     Returns a dict of tensors with keys: w_enc, w_dec, b_enc, b_dec, threshold.
     """
-    filename   = f"{sae_type}/layer_{layer}_width_{width}_l0_{l0}/params.safetensors"
+    filename = f"{sae_type}/layer_{layer}_width_{width}_l0_{l0}/params.safetensors"
     local_path = hf_hub_download(repo_id=sae_repo_id, filename=filename)
-    params     = load_file(local_path, device=DEVICE)
+    params = load_file(local_path, device=DEVICE)
 
     # w_enc: (hidden_dim, sae_dim)  w_dec: (sae_dim, hidden_dim)
     print(f"SAE loaded - layer {layer}, sae_dim={params['w_enc'].shape[1]}, "
@@ -114,8 +114,8 @@ def encode_with_sae(hidden_state: torch.Tensor, sae_weights: dict) -> torch.Tens
 
     Uses JumpReLU (threshold-based activation) rather than plain ReLU. This is what GemmaScope 2 uses.
     """
-    w_enc     = sae_weights["w_enc"]      # (hidden_dim, sae_dim)
-    b_enc     = sae_weights["b_enc"]      # (sae_dim,)
+    w_enc = sae_weights["w_enc"]      # (hidden_dim, sae_dim)
+    b_enc = sae_weights["b_enc"]      # (sae_dim,)
     threshold = sae_weights["threshold"]  # (sae_dim,)
 
     h = hidden_state.to(w_enc.device).to(w_enc.dtype)

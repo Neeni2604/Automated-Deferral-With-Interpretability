@@ -20,9 +20,9 @@ from phase3_classifier import (
 )
 
 
-DATA_DIR       = "data/"
-COVERAGES      = [0.2, 0.3, 0.4]   # evaluate at 20%, 30%, 40% deferral rates
-RESULTS_PATH   = "data/phase3_results.json"
+DATA_DIR = "data/"
+COVERAGES = [0.2, 0.3, 0.4]   # evaluate at 20%, 30%, 40% deferral rates
+RESULTS_PATH = "data/phase3_results.json"
 
 
 def main():
@@ -37,12 +37,12 @@ def main():
     print("=" * 60)
     splits = split_by_ids(
         feature_matrix = feature_matrix,
-        labels         = labels,
-        log_probs      = log_probs,
-        instance_ids   = instance_ids,
+        labels = labels,
+        log_probs = log_probs,
+        instance_ids = instance_ids,
         train_ids_path = DATA_DIR + "train.json",
-        val_ids_path   = DATA_DIR + "val.json",
-        test_ids_path  = DATA_DIR + "test.json",
+        val_ids_path = DATA_DIR + "val.json",
+        test_ids_path = DATA_DIR + "test.json",
     )
 
     X_train, y_train = splits["train"]["X"], splits["train"]["y"]
@@ -67,7 +67,7 @@ def main():
     print("\nValidation set sanity check:")
     for name, pipeline in [("LogReg", lr_pipeline), ("MLP", mlp_pipeline)]:
         val_preds = pipeline.predict(X_val)
-        val_acc   = (val_preds == y_val).mean()
+        val_acc = (val_preds == y_val).mean()
         print(f"  {name} val accuracy: {val_acc:.4f}")
 
 
@@ -75,10 +75,10 @@ def main():
     print("STEP 4: Evaluate deferral systems")
     print("=" * 60)
     results = evaluate_all_systems(
-        splits       = splits,
-        lr_pipeline  = lr_pipeline,
+        splits = splits,
+        lr_pipeline = lr_pipeline,
         mlp_pipeline = mlp_pipeline,
-        coverages    = COVERAGES,
+        coverages = COVERAGES,
     )
 
 

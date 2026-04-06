@@ -121,8 +121,8 @@ def train_logistic_regression(X_train: np.ndarray, y_train: np.ndarray) -> Pipel
 def train_mlp(X_train: np.ndarray, y_train: np.ndarray) -> Pipeline:
     from sklearn.utils import resample
 
-    X_correct   = X_train[y_train == True]
-    y_correct   = y_train[y_train == True]
+    X_correct = X_train[y_train == True]
+    y_correct = y_train[y_train == True]
     X_incorrect = X_train[y_train == False]
     y_incorrect = y_train[y_train == False]
 

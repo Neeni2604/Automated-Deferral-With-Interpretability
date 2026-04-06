@@ -32,7 +32,7 @@ DATASET_NAME  = "kiddothe2b/contract-nli"
 DATASET_SPLIT = "dev"        # dev = validation split in this dataset
 MAX_INSTANCES = 500
 
-TEMPERATURES       = [0.3, 0.7, 1.0, 1.3, 1.7]
+TEMPERATURES = [0.3, 0.7, 1.0, 1.3, 1.7]
 MAJORITY_THRESHOLD = 0.5     # correct on >50% of runs → is_correct = True
 
 OUTPUT_PATH = "data/labeled_instances.json"
@@ -44,33 +44,33 @@ SKIP_LABELING = False
 
 def main():
     print("=" * 60)
-    print("STEP 1 — Available SAE layers")
+    print("STEP 1: Available SAE layers")
     print("=" * 60)
     load_available_layers(SAE_REPO_ID)
 
     print("\n" + "=" * 60)
-    print("STEP 2 — Load Gemma 3")
+    print("STEP 2: Load Gemma 3")
     print("=" * 60)
     model, tokenizer = load_gemma3(MODEL_ID)
 
     print("\n" + "=" * 60)
-    print(f"STEP 3 — Load GemmaScope 2 SAE (layer {TARGET_LAYER})")
+    print(f"STEP 3: Load GemmaScope 2 SAE (layer {TARGET_LAYER})")
     print("=" * 60)
     sae_weights = load_sae(sae_repo_id=SAE_REPO_ID, layer=TARGET_LAYER)
     print("SAE loaded successfully.")
 
     print("\n" + "=" * 60)
-    print("STEP 4 — Load ContractNLI dataset")
+    print("STEP 4: Load ContractNLI dataset")
     print("=" * 60)
     instances = load_dataset(DATASET_NAME, DATASET_SPLIT, MAX_INSTANCES)
     print(f"Loaded {len(instances)} instances.")
 
     print("\n" + "=" * 60)
-    print("STEP 5 — Robustness labeling")
+    print("STEP 5: Robustness labeling")
     print("=" * 60)
 
     if SKIP_LABELING:
-        print(f"SKIP_LABELING=True — loading from {OUTPUT_PATH}")
+        print(f"SKIP_LABELING=True: loading from {OUTPUT_PATH}")
         labeled_instances = load_instances(OUTPUT_PATH)
     else:
         labeler = RobustnessLabeler(
@@ -86,12 +86,12 @@ def main():
     save_instances(labeled_instances, OUTPUT_PATH)
 
     print("\n" + "=" * 60)
-    print("STEP 8 — Train / val / test split")
+    print("STEP 8: Train / val / test split")
     print("=" * 60)
     train, val, test = train_val_test_split(labeled_instances)
     save_instances(train, SPLITS_DIR + "train.json")
-    save_instances(val,   SPLITS_DIR + "val.json")
-    save_instances(test,  SPLITS_DIR + "test.json")
+    save_instances(val, SPLITS_DIR + "val.json")
+    save_instances(test, SPLITS_DIR + "test.json")
 
     print(f"\nDone. Splits: {len(train)} train / {len(val)} val / {len(test)} test")
     print(f"All outputs in: {SPLITS_DIR}")
