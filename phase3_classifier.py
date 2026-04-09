@@ -9,9 +9,11 @@ from dataclasses import dataclass
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import (roc_auc_score, f1_score, classification_report,)
 from sklearn.pipeline import Pipeline
+from sklearn.model_selection import StratifiedKFold
 
 
 @dataclass
@@ -156,7 +158,89 @@ def train_mlp(X_train: np.ndarray, y_train: np.ndarray) -> Pipeline:
     return pipeline
 
 
-# Evaluation
+def train_random_forest(X_train: np.ndarray, y_train: np.ndarray) -> Pipeline:
+    """
+    Train a Random Forest classifier on SAE features.
+    """
+    pipeline = Pipeline([
+        ("scaler", StandardScaler()),
+        ("clf", RandomForestClassifier(
+            n_estimators=200,
+            max_depth=None,
+            class_weight="balanced",
+            random_state=42,
+            n_jobs=-1,
+        )),
+    ])
+    pipeline.fit(X_train, y_train)
+    print("Random Forest trained.")
+    return pipeline
+
+
+def cross_validate_classifiers(
+    X: np.ndarray,
+    y: np.ndarray,
+    n_folds: int = 5,
+    coverages: list[float] = [0.2, 0.3, 0.4],
+) -> dict[str, list[dict]]:
+    """
+    Run stratified K-fold cross-validation for all classifiers.
+    Returns a dict mapping classifier name to a list of per-fold metric dicts.
+    """
+    skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=42)
+
+    results_by_model = {"SAE LogReg": [], "SAE MLP": [], "SAE RF": []}
+
+    for fold_idx, (train_idx, val_idx) in enumerate(skf.split(X, y)):
+        print(f"\n  Fold {fold_idx + 1}/{n_folds}")
+        X_tr, y_tr = X[train_idx], y[train_idx]
+        X_va, y_va = X[val_idx], y[val_idx]
+
+        trainers = {
+            "SAE LogReg": train_logistic_regression,
+            "SAE MLP": train_mlp,
+            "SAE RF": train_random_forest,
+        }
+
+        for name, trainer_fn in trainers.items():
+            pipe = trainer_fn(X_tr, y_tr)
+            scores = get_error_scores_from_classifier(pipe, X_va)
+            error_labels = (~y_va).astype(int)
+            auroc = roc_auc_score(error_labels, scores)
+
+            fold_metrics = {"fold": fold_idx, "auroc": auroc}
+            for cov in coverages:
+                res = evaluate_deferral(name, scores, y_va, cov)
+                fold_metrics[f"f1@{cov}"] = res.f1_defer
+                fold_metrics[f"prec@{cov}"] = res.precision
+                fold_metrics[f"acc_rem@{cov}"] = res.accuracy_remaining
+
+            results_by_model[name].append(fold_metrics)
+            print(f"    {name}: AUROC={auroc:.4f}")
+
+    return results_by_model
+
+
+def print_cv_results(cv_results: dict[str, list[dict]], coverages: list[float] = [0.2, 0.3, 0.4]) -> None:
+    """Print a summary table of cross-validation results with mean ± std."""
+    bar = "=" * 78
+    print(f"\n{bar}")
+    print(f"  K-FOLD CROSS-VALIDATION RESULTS")
+    print(f"{bar}")
+    print(f"  {'System':<18}  {'AUROC':>14}  ", end="")
+    for cov in coverages:
+        print(f"{'F1@'+str(int(cov*100))+'%':>14}  ", end="")
+    print()
+    print(f"  {'-'*18}  {'-'*14}  " + "  ".join(['-'*14]*len(coverages)))
+
+    for name, folds in cv_results.items():
+        aurocs = [f["auroc"] for f in folds]
+        print(f"  {name:<18}  {np.mean(aurocs):.4f} ± {np.std(aurocs):.4f}  ", end="")
+        for cov in coverages:
+            vals = [f[f"f1@{cov}"] for f in folds]
+            print(f"{np.mean(vals):.4f} ± {np.std(vals):.4f}  ", end="")
+        print()
+    print(bar)
 
 def get_error_scores_from_classifier(
     pipeline,
@@ -232,11 +316,12 @@ def evaluate_all_systems(
     splits: dict,
     lr_pipeline,
     mlp_pipeline,
+    rf_pipeline,
     coverages: list[float] = [0.2, 0.3, 0.4],
 ) -> list[DeferralResult]:
     """
     Evaluate all deferral systems at multiple coverage levels on the test set.
-    Systems evaluated: SAE LR, SAE MLP, Confidence baseline (logprob), Random baseline
+    Systems evaluated: SAE LR, SAE MLP, SAE RF, Confidence baseline (logprob), Random baseline
     """
     X_test = splits["test"]["X"]
     y_test = splits["test"]["y"]
@@ -245,6 +330,7 @@ def evaluate_all_systems(
     # Error scores for each system
     lr_scores = get_error_scores_from_classifier(lr_pipeline, X_test)
     mlp_scores = get_error_scores_from_classifier(mlp_pipeline, X_test)
+    rf_scores = get_error_scores_from_classifier(rf_pipeline, X_test)
     conf_scores = get_error_scores_from_logprobs(lp_test)
     random_scores = np.random.default_rng(42).random(len(y_test))
 
@@ -252,6 +338,7 @@ def evaluate_all_systems(
     for cov in coverages:
         results.append(evaluate_deferral("SAE LogReg", lr_scores, y_test, cov))
         results.append(evaluate_deferral("SAE MLP", mlp_scores, y_test, cov))
+        results.append(evaluate_deferral("SAE RF", rf_scores, y_test, cov))
         results.append(evaluate_deferral("Confidence", conf_scores, y_test, cov))
         results.append(evaluate_deferral("Random", random_scores, y_test, cov))
 
