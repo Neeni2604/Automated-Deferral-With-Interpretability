@@ -1,0 +1,67 @@
+============================================================
+STEP 1: Available SAE layers
+============================================================
+Available resid_post SAE layers in google/gemma-scope-2-1b-it:
+  layer_9
+  layer_17
+  layer_22
+  layer_29
+
+============================================================
+STEP 2: Load Gemma 3
+============================================================
+Loading tokenizer: google/gemma-3-1b-it ...
+Loading model: google/gemma-3-1b-it (bfloat16, device_map=auto) ...
+  -> 1.00B parameters on cuda
+
+============================================================
+STEP 3: Load GemmaScope 2 SAE (layer 17)
+============================================================
+SAE loaded - layer 17, sae_dim=16384, hidden_dim=1152
+SAE loaded successfully.
+
+============================================================
+STEP 4: Load ContractNLI dataset
+============================================================
+Loading ContractNLI (kiddothe2b/contract-nli) [dev] ...
+  -> 500 instances loaded
+Loaded 500 instances.
+
+============================================================
+STEP 5: Robustness labeling
+============================================================
+  [  50/500]  correct so far: 29/50 (58.0%)
+  [ 100/500]  correct so far: 51/100 (51.0%)
+  [ 150/500]  correct so far: 71/150 (47.3%)
+  [ 200/500]  correct so far: 92/200 (46.0%)
+  [ 250/500]  correct so far: 122/250 (48.8%)
+  [ 300/500]  correct so far: 150/300 (50.0%)
+  [ 350/500]  correct so far: 171/350 (48.9%)
+  [ 400/500]  correct so far: 194/400 (48.5%)
+  [ 450/500]  correct so far: 224/450 (49.8%)
+  [ 500/500]  correct so far: 241/500 (48.2%)
+
+==========================================================
+  LABEL STATISTICS
+==========================================================
+  Total instances : 500
+  Correct  (True) :   241  (48.2%)
+  Incorrect (False) :   259  (51.8%)
+
+  Avg log-prob - correct : -0.1840  (std 0.4659)
+  Avg log-prob - incorrect : -0.1415  (std 0.4141)
+  (higher = more confident)
+==========================================================
+
+Saved 500 instances -> data/labeled_instances.json
+
+============================================================
+STEP 8: Train / val / test split
+============================================================
+Split -> train=349, val=49, test=102
+Saved 349 instances -> data/train.json
+Saved 49 instances -> data/val.json
+Saved 102 instances -> data/test.json
+
+Done. Splits: 349 train / 49 val / 102 test
+All outputs in: data/
