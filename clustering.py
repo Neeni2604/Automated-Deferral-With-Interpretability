@@ -252,7 +252,7 @@ def print_deferral_comparison(
               f"{cr['auroc']:>6.4f}  {cr['f1_defer']:>6.4f}  "
               f"{cr['precision']:>7.4f}  {cr['accuracy_remaining']:>8.4f}")
 
-        for name in ["SAE MLP", "SAE LogReg", "Confidence", "Random"]:
+        for name in ["SAE MLP", "SAE LogReg", "SAE RF", "Confidence", "Random"]:
             key = (name, cov)
             if key in p3_lookup:
                 r = p3_lookup[key]
