@@ -16,9 +16,9 @@ from safetensors.torch import load_file
 
 
 
-MODEL_ID     = "google/gemma-3-1b-it"       # change to gemma-3-4b-it on CHPC
-SAE_REPO_ID  = "google/gemma-scope-2-1b-it" # change to gemma-scope-2-4b-it on CHPC
-TARGET_LAYER = 17                           # change to 22 for 4B model
+MODEL_ID     = "google/gemma-3-4b-it"       # change to gemma-3-4b-it on CHPC
+SAE_REPO_ID  = "google/gemma-scope-2-4b-it" # change to gemma-scope-2-4b-it on CHPC
+TARGET_LAYER = 22                           # change to 22 for 4B model
 SAE_TYPE     = "resid_post"
 SAE_WIDTH    = "16k"
 SAE_L0       = "medium"
@@ -91,7 +91,7 @@ def register_activation_hook(model, layer_index: int) -> tuple[list, object]:
         hidden = output[0] if isinstance(output, tuple) else output
         buffer.append(hidden.detach().cpu())
 
-    handle = model.model.layers[layer_index].register_forward_hook(_hook)
+    handle = model.model.language_model.layers[layer_index].register_forward_hook(_hook)
     return buffer, handle
 
 
