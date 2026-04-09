@@ -13,6 +13,9 @@ from phase3_classifier import (
     split_by_ids,
     train_logistic_regression,
     train_mlp,
+    train_random_forest,
+    cross_validate_classifiers,
+    print_cv_results,
     evaluate_all_systems,
     print_results_table,
     print_top_features,
@@ -22,6 +25,7 @@ from phase3_classifier import (
 
 DATA_DIR = "data/"
 COVERAGES = [0.2, 0.3, 0.4]   # evaluate at 20%, 30%, 40% deferral rates
+N_FOLDS = 5                    # number of cross-validation folds
 RESULTS_PATH = "data/phase3_results.json"
 
 
@@ -63,21 +67,34 @@ def main():
     print("Training MLP...")
     mlp_pipeline = train_mlp(X_train, y_train)
 
+    print("Training Random Forest...")
+    rf_pipeline = train_random_forest(X_train, y_train)
+
     # Quick val-set check before full evaluation
     print("\nValidation set sanity check:")
-    for name, pipeline in [("LogReg", lr_pipeline), ("MLP", mlp_pipeline)]:
+    for name, pipeline in [("LogReg", lr_pipeline), ("MLP", mlp_pipeline), ("RF", rf_pipeline)]:
         val_preds = pipeline.predict(X_val)
         val_acc = (val_preds == y_val).mean()
         print(f"  {name} val accuracy: {val_acc:.4f}")
 
 
     print("\n" + "=" * 60)
-    print("STEP 4: Evaluate deferral systems")
+    print(f"STEP 4: {N_FOLDS}-Fold Cross-Validation")
+    print("=" * 60)
+    X_all = np.vstack([X_train, X_val])
+    y_all = np.concatenate([splits["train"]["y"], splits["val"]["y"]])
+    cv_results = cross_validate_classifiers(X_all, y_all, n_folds=N_FOLDS, coverages=COVERAGES)
+    print_cv_results(cv_results, coverages=COVERAGES)
+
+
+    print("\n" + "=" * 60)
+    print("STEP 5: Evaluate deferral systems")
     print("=" * 60)
     results = evaluate_all_systems(
         splits = splits,
         lr_pipeline = lr_pipeline,
         mlp_pipeline = mlp_pipeline,
+        rf_pipeline = rf_pipeline,
         coverages = COVERAGES,
     )
 
