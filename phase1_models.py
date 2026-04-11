@@ -18,7 +18,7 @@ from safetensors.torch import load_file
 
 MODEL_ID     = "google/gemma-3-4b-it"       # change to gemma-3-4b-it on CHPC
 SAE_REPO_ID  = "google/gemma-scope-2-4b-it" # change to gemma-scope-2-4b-it on CHPC
-TARGET_LAYER = 22                           # change to 22 for 4B model
+TARGET_LAYER = 29                           # change to 29 for 4B model
 SAE_TYPE     = "resid_post"
 SAE_WIDTH    = "16k"
 SAE_L0       = "medium"
