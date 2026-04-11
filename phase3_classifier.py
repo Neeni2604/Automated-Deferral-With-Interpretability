@@ -407,8 +407,4 @@ def save_results(results: list[DeferralResult], path: str = "data/phase3_results
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     with open(path, "w") as f:
         json.dump([dataclasses.asdict(r) for r in results], f, indent=2)
-<<<<<<< HEAD
     print(f"Results saved → {path}")
-=======
-    print(f"Results saved → {path}")
->>>>>>> 27cffeb (Results)
