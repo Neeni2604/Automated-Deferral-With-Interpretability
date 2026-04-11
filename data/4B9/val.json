@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "dev_6880",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nThe Receiving Party will not disclose to any Person the Confidential Information or other facts directly related to the Confidential Information unless, in the reasonable opinion of the Receiving Party’s legal counsel, disclosure is required by legal process or regulatory demands, in which event the Receiving Party will, prior to such disclosure, promptly provide the Disclosing Party with written notice of the intended disclosure so that the Disclosing Party may seek a protective order or other appropriate protection.\n\nHypothesis: Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7278",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n I understand that upon termination of my employment/affiliation/association with FAU, I will immediately return or destroy, as appropriate, any FAU Confidential Information, Restricted Data and Sensitive Data in my possession. \n\nHypothesis: Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7074",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nCI means Discloser’s non-public written information, in any form, and all copies, summaries and extracts which is identified in writing as confidential at the time of disclosure, and any information disclosed in non-tangible form that is identified as confidential at the time of disclosure and summarized in a writing labelled as “confidential” delivered to Recipient within 15 days after disclosure. \n\nHypothesis: Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.05937093123793602
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7158",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nWithout BOMI’s prior written consent, which may be given or withheld by BOMI in its sole and absolute discretion, Attendee will not at any time, whether during or after the Testing Period,  (a) disclose any Confidential Information to any third party nor give any third party access thereto, nor \n\nHypothesis: Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "B",
+    "predictions": [
+      "B",
+      "B",
+      "B",
+      "B",
+      "B"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.06846131384372711
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7034",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nAll such Confidential Information in tangible form shall be returned to the Owner promptly upon written request or the termination or expiration of this Agreement, and shall not thereafter be retained in any form by the Recipient, its Affiliates, or any employees or independent contractors of the Recipient or its Affiliates. \n\nHypothesis: Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7280",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nThe term “Information” shall not include any Information which: (1) The Receiving Party can show, by suitable written documentation, was already in its possession prior to receipt of such Information by Delivering Party; (2) The Receiving Party can show is or becomes public information or is otherwise generally available to the public, other than as a result of a disclosure by the Receiving Party or its Representatives; (3) The Receiving Party can show becomes or became available to the Receiving Party on a non-confidential basis from a source lawfully in possession of such Information (other than the Delivering Party or a Representative of the Delivery Party) which is not, to the knowledge of the Receiving Party, in breach of any agreement or prohibited from disclosing such Information to Receiving Party by a legal, contractual or fiduciary obligation to the Delivering Party; OR\n\nHypothesis: Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      -0.10020658373832703,
+      -0.16309505701065063,
+      -0.2360159158706665
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7179",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nThe receiving party further agrees to use the same degree of care, but no less than a reasonable degree of care, with any “Confidential Information” as it would with its own confidential information, and to limit dissemination of the “Confidential Information” to such of its employees who have a need to know of the “Confidential Information.\n\nHypothesis: Receiving Party may share some Confidential Information with some of Receiving Party's employees.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.0788896381855011
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7182",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nWithout BOMI’s prior written consent, which may be given or withheld by BOMI in its sole and absolute discretion, Attendee will not at any time, whether during or after the Testing Period,  (a) disclose any Confidential Information to any third party nor give any third party access thereto, nor  (b) use any Confidential Information except as required in taking the Test. \n\nHypothesis: Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      -0.10020658373832703,
+      -0.1630944460630417,
+      -0.2360159158706665
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7079",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nThe obligation of confidentiality set forth in this Agreement shall not apply to any information that:  (a) is, at the time of disclosure to the receiving party, generally available to the public or thereafter becomes generally available to the public through no act, omission or fault of the receiving party;  (b) is required to be disclosed by the receiving party by final order of a court of competent jurisdiction or law, regulation or rule of a self-regulatory body; provided, however, that prior to such disclosure by the receiving party, the receiving party shall provide written notice of such order or requirement to the disclosing party and allow the disclosing party a reasonable opportunity to secure confidential treatment of any information by such court or appropriate government agency, if applicable, and the receiving party shall cooperate with the disclosing party in such effort; \n\nHypothesis: Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7209",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n4. These obligations contained in this Agreement do not apply to Confidential Information that: a. As shown by reasonably documented proof, was in the other’s lawful possession without restriction on use or disclosure prior to receipt thereof from the disclosing Party; or b. As shown by reasonably documented proof, was received by one Party in good faith from a third party not subject to a confidential obligation to the other Party and without breach of this Agreement; or c. Now is or later becomes part of the public domain through no breach of confidential obligation by the receiving Party; or d. Is disclosed pursuant to a requirement imposed by a governmental agency or is otherwise required to be disclosed by operation of law, except that prior to any disclosure pursuant to this subsection, the Party receiving the request for the information shall notify the disclosing Party and provide them with an opportunity to participate in objecting to production of the Confidential Information; or e. Was developed by the receiving Party independently from and without the developing person(s) having access to any of the Confidential Information received from the other Party; or\n\nHypothesis: Receiving Party may create a copy of some Confidential Information in some circumstances.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.07888974994421005
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7301",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nI understand that I may access and/or use FAU Confidential Information, Restricted Data and Sensitive Data only as necessary to perform my job-related duties and that I may disclose (i.e., share) FAU Confidential Information, Restricted Data, and/or Sensitive Data only to authorized individuals with a need to know that information in connection with the performance of their job functions or professional duties.\n\nHypothesis: Receiving Party may independently develop information similar to Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "B",
+      "B",
+      "B",
+      "B",
+      "B"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.05145673453807831
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7050",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nAll such Confidential Information in tangible form shall be returned to the Owner promptly upon written request or the termination or expiration of this Agreement, and shall not thereafter be retained in any form by the Recipient, its Affiliates, or any employees or independent contractors of the Recipient or its Affiliates. \n\nHypothesis: Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7132",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n“Confidential Information” means: (a) Information, including all personal data within the meaning of the Data Protection Act 1998, and however it is conveyed, provided by the Disclosing Party pursuant to [or in anticipation of] this Agreement that relates to: (i) the Disclosing Party Group; or (ii) the operations, business, affairs, developments, intellectual property rights, trade secrets, know-how and/or personnel of the Disclosing Party Group; (b) other Information provided by the Disclosing Party pursuant to [or in anticipation of] this Agreement that is clearly designated as being confidential or equivalent (whether or not it is so marked) or that ought reasonably to be considered to be confidential which comes (or has come) to the Receiving Party’s attention or into the Receiving Party’s possession in connection with the Permitted Purpose; (c) discussions, negotiations, and correspondence between the Disclosing Party or any of its directors, officers, employees, consultants or professional advisers and the Receiving Party or any of its directors, officers, employees, consultants and professional advisers in connection with the Permitted Purpose and all matters arising there from; and (d) Information derived from any of the above, but not including any Information that: 1.1.1.1 was in the possession of the Receiving Party without obligation of confidentiality prior to its disclosure by the Disclosing Party; 1.1.1.2 the Receiving Party obtained on a non-confidential basis...\n\nHypothesis: Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.051456622779369354
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7080",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nThe obligation of confidentiality set forth in this Agreement shall not apply to any information that:  (a) is, at the time of disclosure to the receiving party, generally available to the public or thereafter becomes generally available to the public through no act, omission or fault of the receiving party;  (b) is required to be disclosed by the receiving party by final order of a court of competent jurisdiction or law, regulation or rule of a self-regulatory body; provided, however, that prior to such disclosure by the receiving party, the receiving party shall provide written notice of such order or requirement to the disclosing party and allow the disclosing party a reasonable opportunity to secure confidential treatment of any information by such court or appropriate government agency, if applicable, and the receiving party shall cooperate with the disclosing party in such effort;  (c) is known by the receiving party at the time of receipt from the disclosing party as evidenced by the receiving party’s documentation and not subject to an existing agreement of confidentiality;  (d) was independently developed by the receiving party as evidenced by its records without use of the Confidential Information; or  (e) is lawfully received without restriction from a third party who is not bound by any obligation of confidentiality.\n\nHypothesis: Receiving Party may acquire information similar to Confidential Information from a third party.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7072",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nCI means Discloser’s non-public written information, in any form, and all copies, summaries and extracts which is identified in writing as confidential at the time of disclosure, and any information disclosed in non-tangible form that is identified as confidential at the time of disclosure and summarized in a writing labelled as “confidential” delivered to Recipient within 15 days after disclosure. \n\nHypothesis: Some obligations of Agreement may survive termination of Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      -0.055844057351350784,
+      -2.1269280910491943,
+      -1.7329695224761963,
+      -1.445246934890747
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7175",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nDuring this period the receiving party shall not disclose the received “Confidential Information” to any third party, and shall not use the received “Confidential Information” for any purpose other than the aforesaid purposes. \n\nHypothesis: Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "B",
+    "predictions": [
+      "B",
+      "B",
+      "B",
+      "B",
+      "B"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7076",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nUnless expressly set forth in this NDA, Recipient does not receive any license or intellectual property rights to Discloser’s CI. \n\nHypothesis: Receiving Party shall not solicit some of Disclosing Party's representatives.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      -0.029750416055321693,
+      -0.06552983075380325,
+      -2.4191837310791016
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7276",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n(a) Each Receiving Party shall keep all Confidential Information it receives or obtains from a Disclosing Party confidential and shall not, without the prior written consent of the Disclosing Party, disclose such Confidential Information, in whole or in part, and shall not use such Confidential Information, directly or indirectly, for any purpose other than in connection with evaluating the Transaction. \n\nHypothesis: Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_6961",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n8. In the event Recipient receives a subpoena or other validly issued administrative or judicial process requesting Confidential Information, Recipient shall provide prompt actual notice to the General Counsel of NASDAQ OMX of such receipt, providing the Corporations with a reasonable opportunity to intervene in the proceeding before the time that Recipient is required to comply with such subpoena or other process. \n\nHypothesis: Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7316",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nI hereby agree as follows:  I will maintain patient privacy and protect and safeguard the confidentiality and security of PHI and FAU Confidential Information in accordance with Florida and federal laws and FAU policies and procedures.  I understand that access to health information created, received, or maintained by FAU or its affiliates is limited to those who have a valid business, medical, or professional need to know the information.  I understand that FAU has implemented administrative, technical, and physical safeguards to protect the confidentiality and security of PHI, and I agree not to bypass or disable these safeguards.  I will not disclose any PHI to any individual or third party, except as specifically authorized by FAU policies and procedures, and upon receiving a written authorization from the patient (unless otherwise required by applicable law), and then only on a need-to-know basis.\n\nHypothesis: All Confidential Information shall be expressly identified by the Disclosing Party.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      -0.06196761503815651,
+      -0.11385232955217361,
+      -0.18095830082893372
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_6861",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n2.3 Notwithstanding the foregoing, the Recipient shall be entitled to make any disclosure required by law of the other party's Confidential Information, but shall give the other party not less than two (2) business days' notice of such disclosure and shall consult with the Discloser prior to such disclosure with a view to avoiding such disclosure if legally possible.\n\nHypothesis: Receiving Party shall not solicit some of Disclosing Party's representatives.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      -1.8396661281585693,
+      -0.39846813678741455,
+      -0.4740769863128662,
+      -0.9038339853286743,
+      -0.5568630695343018
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7259",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nThe term “Information” shall not include any Information which: (1) The Receiving Party can show, by suitable written documentation, was already in its possession prior to receipt of such Information by Delivering Party; (2) The Receiving Party can show is or becomes public information or is otherwise generally available to the public, other than as a result of a disclosure by the Receiving Party or its Representatives; (3) The Receiving Party can show becomes or became available to the Receiving Party on a non-confidential basis from a source lawfully in possession of such Information (other than the Delivering Party or a Representative of the Delivery Party) which is not, to the knowledge of the Receiving Party, in breach of any agreement or prohibited from disclosing such Information to Receiving Party by a legal, contractual or fiduciary obligation to the Delivering Party; OR\n\nHypothesis: Receiving Party may acquire information similar to Confidential Information from a third party.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      -0.05437110736966133,
+      -0.10449802130460739
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7140",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n5.3 Following any destruction or return of Confidential Information to the Disclosing Party pursuant to Clause 5.1, the Receiving Party’s obligations under this Agreement shall otherwise continue in force without limit of time.\n\nHypothesis: Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.059371042996644974
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7295",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n I understand that upon termination of my employment/affiliation/association with FAU, I will immediately return or destroy, as appropriate, any FAU Confidential Information, Restricted Data and Sensitive Data in my possession. \n\nHypothesis: Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_6995",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nPrior to any disclosure pursuant to a court order, the contractor shall promptly notify VA of the court order and provide VA with a copy by fax or e-mail, whichever is faster, and notify by telephone the VA individual designated in advance to receive such notices. \n\nHypothesis: Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      -0.07888974994421005,
+      -0.13786396384239197
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_6906",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nConfidential Information excludes any information that:  (i) the Disclosing Party has not specifically notified the Party is confidential;  (ii) becomes available to the Party or the Reviewing Representative on a non-confidential basis from a source other than: (a) the Disclosing Party, or other person acting on behalf of the Disclosing Party; or  (b) a Party who has confidentiality obligations to the Disclosing Party;  (iii) is or becomes generally available to the public other than as a result of a disclosure by the Party or its Reviewing Representatives;  (iv) was previously known to the Party or its Reviewing Representative free and clear of any obligation to keep it confidential;  (v) is disclosed to third parties by the Disclosing Party without restriction or obligation of confidentiality;  (vi) is developed independently by the Party as evidenced by documentation made in the ordinary course of business by the Party; or \n\nHypothesis: Receiving Party may independently develop information similar to Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "C",
+      "A",
+      "C",
+      "C",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_6927",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nNotwithstanding anything to the contrary in this Agreement, a Party may disclose Confidential Information to the extent but only to the extent:  (a) approved by the Disclosing Party in writing; or  (b) required by Law or an Authority, but only if:  (i) the Party attempts to notify the Disclosing Party as far in advance as practicable prior to making disclosure of its intent to disclose Confidential Information and of the content and mode of communication of the disclosure; and  (ii) the Party cooperates with the Disclosing Party's efforts to obtain a protective order protecting the Confidential Information from disclosure.  In addition, if disclosure is required by Law or Authority, the Party to the extent practicable (and permitted by law), will  (1) promptly notify the Disclosing Party of the circumstances surrounding the requirement,  (2) consult with the Disclosing Party on available options to request confidential treatment and/or the advisability of taking legally available steps to resist or narrow the request or requirement for disclosure, and  (3) disclose such Confidential Information only after using all reasonable efforts to comply with subsections  (1) and  (2) above and after cooperating with the Disclosing Party’s reasonable efforts to obtain a protective order or other reliable assurance that confidential treatment will be accorded to any portion of the Confidential Information designated for such treatment by the Disclosing Party. \n\nHypothesis: Receiving Party may create a copy of some Confidential Information in some circumstances.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.059371042996644974
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7177",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nWithout BOMI’s prior written consent, which may be given or withheld by BOMI in its sole and absolute discretion, Attendee will not at any time, whether during or after the Testing Period,  (a) disclose any Confidential Information to any third party nor give any third party access thereto, nor  (b) use any Confidential Information except as required in taking the Test. \n\nHypothesis: Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7207",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n4. These obligations contained in this Agreement do not apply to Confidential Information that: a. As shown by reasonably documented proof, was in the other’s lawful possession without restriction on use or disclosure prior to receipt thereof from the disclosing Party; or b. As shown by reasonably documented proof, was received by one Party in good faith from a third party not subject to a confidential obligation to the other Party and without breach of this Agreement; or c. Now is or later becomes part of the public domain through no breach of confidential obligation by the receiving Party; or d. Is disclosed pursuant to a requirement imposed by a governmental agency or is otherwise required to be disclosed by operation of law, except that prior to any disclosure pursuant to this subsection, the Party receiving the request for the information shall notify the disclosing Party and provide them with an opportunity to participate in objecting to production of the Confidential Information; or e. Was developed by the receiving Party independently from and without the developing person(s) having access to any of the Confidential Information received from the other Party; or\n\nHypothesis: Receiving Party shall not solicit some of Disclosing Party's representatives.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      -2.2537853717803955,
+      -0.2014133334159851,
+      -1.4280035495758057,
+      -0.34628742933273315
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_6921",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nA Reviewing Representative may make copies or Notes of Confidential Information that shall be subject to this Agreement. \n\nHypothesis: Some obligations of Agreement may survive termination of Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -2.853487968444824
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7190",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nFor the purposes of this non-disclosure agreement, the term 'confidential information' means information which is designated as 'confidential' or – where communicated orally – is designated as confidential or referred to similarly when communicated.  Oral communications must be confirmed subsequently in writing. The term 'confidential information' includes, but is not limited to, all documents, drawings, data, subjects, information, records, knowhow, protected rights, inventions, ideas, concepts, knowledge, technology, design, specifications, including dimensions, tolerances, materials and connections, blueprints, diagrams, software, improvements, production procedures, production processes, formulae, all documents and information concerning the company, in particular administrative and commercial facts and details concerning customers, products, suppliers and other business partners and any and all documents and information insofar as it relates to the collaboration proposed which is disclosed during the term of the contract and is accessible only to a limited circle of persons or where the DISCLOSER intends that it should only be available to a limited circle of persons, however that information may be disclosed, e.g. in writing, orally, by telephone, encoded, presented in graphic form, etc. and whatever the media and recording process used, e.g. optically, electronically or magnetically.   The DISCLOSEE for the purposes of this agreement is the DISCLOSEE as defined above. ...\n\nHypothesis: Confidential Information may include verbally conveyed information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.051456622779369354
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7233",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n1. Subject to the limitations set forth herein, “Confidential Information” means any and all confidential, proprietary or trade secret information of Disclosing Party (whether oral, written, electronic or otherwise), including but not limited to marketing and sales data, customer lists, customer requirements, price lists, product and service lists, market studies, financial statements, business plans, the names and backgrounds of key personnel, research and development, service methods, processes, improvements, devices, know-how, inventions, discoveries, concepts, ideas, designs, methods and information, and all related notes, analyses, compilations, studies, specifications, designs, plans, enhancements, data of Disclosing Party and any notes or other materials prepared by Receiving Party or any of its partners, directors, officers, employees, agents, contractors, affiliates, attorneys and other advisors or representatives (collectively, “Representatives”) that contain or are generated from such information.\n\nHypothesis: Confidential Information shall only include technical information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "B",
+    "predictions": [
+      "B",
+      "B",
+      "B",
+      "B",
+      "B"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7285",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nThe term “Information” shall not include any Information which: (1) The Receiving Party can show, by suitable written documentation, was already in its possession prior to receipt of such Information by Delivering Party; (2) The Receiving Party can show is or becomes public information or is otherwise generally available to the public, other than as a result of a disclosure by the Receiving Party or its Representatives; (3) The Receiving Party can show becomes or became available to the Receiving Party on a non-confidential basis from a source lawfully in possession of such Information (other than the Delivering Party or a Representative of the Delivery Party) which is not, to the knowledge of the Receiving Party, in breach of any agreement or prohibited from disclosing such Information to Receiving Party by a legal, contractual or fiduciary obligation to the Delivering Party; OR\n\nHypothesis: Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      -0.05437099561095238,
+      -0.10449802130460739
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_6938",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nb) it will not use the information for any commercial purpose or manufacture without obtaining a written licence or other agreement from the disclosing party;\n\nHypothesis: Some obligations of Agreement may survive termination of Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      -0.06552983075380325,
+      -0.1200951412320137
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7164",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nWithout BOMI’s prior written consent, which may be given or withheld by BOMI in its sole and absolute discretion, Attendee will not at any time, whether during or after the Testing Period,  (a) disclose any Confidential Information to any third party nor give any third party access thereto, nor \n\nHypothesis: Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      -0.10020658373832703,
+      -0.1630944460630417,
+      -0.2360159158706665
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7310",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nProspect and Prospect’s Broker acknowledge that all information and materials provided by Listing Broker regarding the above-referenced Property is confidential and may not be used for any purpose other than evaluation. \n\nHypothesis: Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7061",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nRecipient will not modify, reverse engineer, create other works from, or disassemble any software programs contained in the CI without Discloser’s prior written consent. \n\nHypothesis: Receiving Party may create a copy of some Confidential Information in some circumstances.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "B",
+      "B",
+      "B",
+      "B",
+      "B"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      -0.05437110736966133,
+      -0.10449802130460739
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7016",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nThe Receiving Party shall not be entitled to copy any Confidential Information furnished by the Disclosing Party hereunder, unless and to the extent it is necessary for the purpose of this Agreement. \n\nHypothesis: Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7138",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nThe Receiving Party acknowledges and agrees that all property, including intellectual property rights, in Confidential Information disclosed to it by the Disclosing Party shall remain with and be vested in the Disclosing Party or relevant member of the Disclosing Party Group. 6.2  This Agreement does not include, expressly or by implication, any representations, warranties or other obligations: 6.2.1 to grant the Receiving Party any licence or rights other than as may be expressly stated in this Agreement;\n\nHypothesis: Some obligations of Agreement may survive termination of Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.051456622779369354
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7214",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n4. These obligations contained in this Agreement do not apply to Confidential Information that: a. As shown by reasonably documented proof, was in the other’s lawful possession without restriction on use or disclosure prior to receipt thereof from the disclosing Party; or b. As shown by reasonably documented proof, was received by one Party in good faith from a third party not subject to a confidential obligation to the other Party and without breach of this Agreement; or c. Now is or later becomes part of the public domain through no breach of confidential obligation by the receiving Party; or d. Is disclosed pursuant to a requirement imposed by a governmental agency or is otherwise required to be disclosed by operation of law, except that prior to any disclosure pursuant to this subsection, the Party receiving the request for the information shall notify the disclosing Party and provide them with an opportunity to participate in objecting to production of the Confidential Information; or e. Was developed by the receiving Party independently from and without the developing person(s) having access to any of the Confidential Information received from the other Party; or\n\nHypothesis: Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7225",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nNothing in this Agreement shall prevent the Company from disclosing Confidential Information to the extent the Company is lawfully required to be disclosed to any governmental agency or is otherwise required to be disclosed by law, provided that Company gives the AOC prompt written notice of such requirement before making such disclosure and Company gives the AOC an adequate opportunity and assistance to interpose an objection or take action to assure confidential handling of such Confidential Information.\n\nHypothesis: Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_6907",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nIf BROOKS is legally compelled (whether by regulatory request, deposition, interrogatory, request for documents, subpoena, civil investigation, demand or similar process) to disclose any Confidential Information, BROOKS shall immediately notify the CLIENT in writing of such requirements so that the CLIENT may seek a protective order or other appropriate remedy and/or waive compliance with the provisions hereof. \n\nHypothesis: Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7018",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nNothing in this Agreement is intended to grant any rights to the Recipient in any copyrights or other intellectual property of the Discloser, nor shall this Agreement grant any Party any proprietary rights in or to the Confidential Information of the other Party.\n\nHypothesis: Agreement shall not grant Receiving Party any right to Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.06846131384372711
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_6841",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nConfidential Information does not include information: (i) which is or becomes public knowledge and public property in any way without breach of this Agreement by the Recipient; (ii) which the Recipient can show has been known or has been developed by or for the Recipient at any time independently of the information disclosed to it by the Discloser;\n\nHypothesis: Receiving Party may independently develop information similar to Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "B",
+      "B",
+      "B",
+      "B",
+      "B"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.059371042996644974
+    ],
+    "is_correct": false
+  },
+  {
+    "id": "dev_7245",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n2. Upon receipt of any Confidential Information, Receiving Party shall: (a) only disclose such Confidential Information to those of its Representatives with a need to have access to and knowledge of the Confidential Information for the limited purpose expressly stated herein and not disclose to any other person except with the prior written approval of Disclosing Party; (b) advise any of its Representatives who receive the Confidential Information of the existence and terms of this Agreement and of the obligations of confidentiality and non-disclosure herein; cause its Representatives to comply with this Agreement as if they were parties hereto; and be responsible for any breach of this Agreement by its Representatives; (c) use and require its Representatives to use at least the same degree of care to protect the Confidential Information as they use to protect their own proprietary information, which degree of care shall not be less than reasonable care; and (d) use, and require its  Representatives to use, the Confidential Information only for the purpose expressly stated herein; provided that nothing in this Agreement is intended to limit or prevent either Party from continuing to operate its business in the ordinary course, including conducting business with any person who happens also to be a customer or vendor of the other Party.\n\nHypothesis: Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7033",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nEach Party receiving Confidential Information (as defined below) (each, a \"Recipient,\" and together, the \"Recipients\"), is receiving confidential disclosure of certain confidential or proprietary technical, business, operational, financial and/or commercial information, trade secret information and/or any information of the other designated as “Confidential”, “Proprietary” or by similar designation, or which under the circumstances surrounding disclosure ought to be treated as confidential (\"Confidential Information\") for the purpose of exploring, establishing, performing or carrying out a contractual business relationship for the production by the Producer of the Commercial and/or other commercial productions for the Client (collectively and severally, the “Transaction\").  Each disclosing Party (each a \"Discloser\") would not disclose its Confidential Information without the Recipient's agreement to maintain the Confidential Information in confidence and to use such Confidential Information solely as permitted under this Agreement.  Confidential Information can be in any form (e.g. electronic, digital, analog, hard copy or oral).  Nothing in this Agreement shall require a Party to disclose its Confidential Information. Specifically, with respect to the Producer, the term “Confidential Information” includes confidential and proprietary information of Producer disclosed in connection with the Transaction (during each phase including pre-production, conference(s), pre-bid, bid, ...\n\nHypothesis: Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      -0.05437099561095238,
+      -0.10449802130460739
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_6949",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nThe Recipient agrees that all Confidential Information, including any copies thereof, shall be returned to NASDAQ OMX or destroyed within ten (10) days of the expiration or other termination of the Project.\n\nHypothesis: Receiving Party shall not reverse engineer any objects which embody Disclosing Party's Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      -0.030899038538336754,
+      -0.13253448903560638
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7003",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n2.1  For the purpose of this Agreement, “Confidential Information” means any information received by a Party (the “Receiving Party”) regarding the other Party’s (the “Disclosing Party”) business, research, products and/or services, such as all information and technology, including without limitation, research, inventions, manufacture methods, data, designs, plans, drawings, know-how, IT systems, software, processes, schematics, blueprints, records, reports, models, prototypes and descriptions related thereto, customers, partners, as well as the terms and conditions of this Agreement and information furnished during discussions or oral presentations, whether or not designated as confidential at the time of disclosure.\n\nHypothesis: Confidential Information shall only include technical information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "B",
+    "predictions": [
+      "B",
+      "B",
+      "B",
+      "B",
+      "B"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_7046",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\n5. In the event the Recipient is required by law, regulation or court order to disclose any of the Owner’s Confidential Information, the Recipient will promptly notify the Owner in writing prior to making any such disclosure in order to facilitate seeking a protective order by the Owner or other appropriate remedy from the proper authority. \n\nHypothesis: Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "A",
+    "predictions": [
+      "A",
+      "A",
+      "A",
+      "A",
+      "A"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.04457395151257515
+    ],
+    "is_correct": true
+  },
+  {
+    "id": "dev_6874",
+    "input_text": "Read the contract excerpt and the hypothesis, then choose the correct label.\n\nContract excerpt:\nIn addition, upon the completion of the services provided by VENDOR to BPS as outlined in this Agreement, VENDOR shall return or destroy, as BPS may instruct, all Confidential Information in VENDOR’S possession or control, whether in printed, electronic or any other format, including all duplicates and copies thereof of any files, compilation, study, report, analysis or data base containing, based on or derived from the Confidential Information.\n\nHypothesis: Receiving Party may independently develop information similar to Confidential Information.\n\nA) Entailment: the contract supports the hypothesis\nB) Contradiction: the contract contradicts the hypothesis\nC) Not Mentioned: the contract does not address the hypothesis\n\nAnswer (A, B, or C):",
+    "gold_label": "C",
+    "predictions": [
+      "C",
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "log_probs": [
+      0.0,
+      0.0,
+      0.0,
+      -0.07888974994421005,
+      -0.1378636509180069
+    ],
+    "is_correct": true
+  }
+]

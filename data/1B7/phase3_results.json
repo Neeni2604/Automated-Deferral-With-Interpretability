@@ -1,0 +1,137 @@
+[
+  {
+    "name": "SAE LogReg",
+    "coverage": 0.2,
+    "precision": 0.65,
+    "accuracy_remaining": 0.5,
+    "n_deferred": 20,
+    "auroc": 0.6178626543209876,
+    "f1_defer": 0.35135135135135137
+  },
+  {
+    "name": "SAE MLP",
+    "coverage": 0.2,
+    "precision": 0.4,
+    "accuracy_remaining": 0.43902439024390244,
+    "n_deferred": 20,
+    "auroc": 0.5638503086419753,
+    "f1_defer": 0.21621621621621623
+  },
+  {
+    "name": "SAE RF",
+    "coverage": 0.2,
+    "precision": 0.8,
+    "accuracy_remaining": 0.5365853658536586,
+    "n_deferred": 20,
+    "auroc": 0.6782407407407407,
+    "f1_defer": 0.43243243243243246
+  },
+  {
+    "name": "Confidence",
+    "coverage": 0.2,
+    "precision": 0.55,
+    "accuracy_remaining": 0.47560975609756095,
+    "n_deferred": 20,
+    "auroc": 0.47916666666666663,
+    "f1_defer": 0.2972972972972973
+  },
+  {
+    "name": "Random",
+    "coverage": 0.2,
+    "precision": 0.45,
+    "accuracy_remaining": 0.45121951219512196,
+    "n_deferred": 20,
+    "auroc": 0.4097222222222222,
+    "f1_defer": 0.24324324324324326
+  },
+  {
+    "name": "SAE LogReg",
+    "coverage": 0.3,
+    "precision": 0.7,
+    "accuracy_remaining": 0.5416666666666666,
+    "n_deferred": 30,
+    "auroc": 0.6178626543209876,
+    "f1_defer": 0.5
+  },
+  {
+    "name": "SAE MLP",
+    "coverage": 0.3,
+    "precision": 0.5666666666666667,
+    "accuracy_remaining": 0.4861111111111111,
+    "n_deferred": 30,
+    "auroc": 0.5638503086419753,
+    "f1_defer": 0.40476190476190477
+  },
+  {
+    "name": "SAE RF",
+    "coverage": 0.3,
+    "precision": 0.8,
+    "accuracy_remaining": 0.5833333333333334,
+    "n_deferred": 30,
+    "auroc": 0.6782407407407407,
+    "f1_defer": 0.5714285714285714
+  },
+  {
+    "name": "Confidence",
+    "coverage": 0.3,
+    "precision": 0.5333333333333333,
+    "accuracy_remaining": 0.4722222222222222,
+    "n_deferred": 30,
+    "auroc": 0.47916666666666663,
+    "f1_defer": 0.4
+  },
+  {
+    "name": "Random",
+    "coverage": 0.3,
+    "precision": 0.4666666666666667,
+    "accuracy_remaining": 0.4444444444444444,
+    "n_deferred": 30,
+    "auroc": 0.4097222222222222,
+    "f1_defer": 0.3333333333333333
+  },
+  {
+    "name": "SAE LogReg",
+    "coverage": 0.4,
+    "precision": 0.675,
+    "accuracy_remaining": 0.5645161290322581,
+    "n_deferred": 40,
+    "auroc": 0.6178626543209876,
+    "f1_defer": 0.574468085106383
+  },
+  {
+    "name": "SAE MLP",
+    "coverage": 0.4,
+    "precision": 0.6,
+    "accuracy_remaining": 0.5161290322580645,
+    "n_deferred": 40,
+    "auroc": 0.5638503086419753,
+    "f1_defer": 0.5106382978723404
+  },
+  {
+    "name": "SAE RF",
+    "coverage": 0.4,
+    "precision": 0.7,
+    "accuracy_remaining": 0.5806451612903226,
+    "n_deferred": 40,
+    "auroc": 0.6782407407407407,
+    "f1_defer": 0.5957446808510638
+  },
+  {
+    "name": "Confidence",
+    "coverage": 0.4,
+    "precision": 0.55,
+    "accuracy_remaining": 0.4838709677419355,
+    "n_deferred": 40,
+    "auroc": 0.47916666666666663,
+    "f1_defer": 0.5
+  },
+  {
+    "name": "Random",
+    "coverage": 0.4,
+    "precision": 0.45,
+    "accuracy_remaining": 0.41935483870967744,
+    "n_deferred": 40,
+    "auroc": 0.4097222222222222,
+    "f1_defer": 0.3829787234042553
+  }
+]
