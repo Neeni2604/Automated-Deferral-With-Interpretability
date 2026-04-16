@@ -100,7 +100,7 @@ for ax, (model_key, model_data) in zip(axes, models.items()):
                                 linewidth=1.0,
                                 clip_on=False))
     ax.text(0.5, 0.940, model_data['title'],
-            ha='center', va='center', fontsize=13, fontweight='bold',
+            ha='center', va='center', fontsize=15, fontweight='bold',
             color='black', transform=ax.transAxes)
 
     ax.text(0.13, 0.879, 'Cluster', ha='center', va='center',
@@ -121,11 +121,11 @@ for ax, (model_key, model_data) in zip(axes, models.items()):
                                     linewidth=1.0))
         ax.text(label_x + label_w / 2, y - h / 2 + 0.025,
                 cluster['label'], ha='center', va='center',
-                fontsize=13, fontweight='bold',
+                fontsize=15, fontweight='bold',
                 color='black', transform=ax.transAxes)
         ax.text(label_x + label_w / 2, y - h / 2 - 0.025,
                 f"n={cluster['n']}", ha='center', va='center',
-                fontsize=9, color='black',
+                fontsize=11, color='black',
                 alpha=0.75, transform=ax.transAxes)
 
         ax.add_patch(FancyBboxPatch((feat_x, y - h), feat_w, h,
@@ -137,7 +137,7 @@ for ax, (model_key, model_data) in zip(axes, models.items()):
         for j, feat in enumerate(cluster['features']):
             fy = y - (j + 1) * h / (n_feats + 1)
             ax.text(feat_x + 0.03, fy, feat,
-                    ha='left', va='center', fontsize=9,
+                    ha='left', va='center', fontsize=15,
                     color='black', transform=ax.transAxes)
 
         y -= h + gap

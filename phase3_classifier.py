@@ -24,6 +24,7 @@ class DeferralResult:
     name: str
     coverage: float
     precision: float
+    recall: float
     accuracy_remaining: float
     n_deferred: int
     auroc: float
@@ -288,6 +289,11 @@ def evaluate_deferral(
     deferred_labels = labels[list(defer_idx)]
     precision = float((~deferred_labels).mean()) if len(deferred_labels) > 0 else 0.0
 
+    # Recall
+    total_errors = int((~labels).sum())
+    true_positives = int((~deferred_labels).sum())
+    recall = float(true_positives / total_errors) if total_errors > 0 else 0.0
+
     # Accuracy on kept instances (ones automated-deferral handles)
     kept_labels = labels[keep_idx]
     accuracy_remaining = float(kept_labels.mean()) if len(kept_labels) > 0 else 0.0
@@ -305,6 +311,7 @@ def evaluate_deferral(
         name = name,
         coverage = coverage,
         precision = precision,
+        recall=recall,
         accuracy_remaining = accuracy_remaining,
         n_deferred = n_defer,
         auroc = auroc,
@@ -365,7 +372,8 @@ def print_results_table(results: list[DeferralResult]) -> None:
             print(
                 f"  {r.coverage:>8.0%}  {r.name:<18}  "
                 f"{r.auroc:>6.4f}  {r.f1_defer:>6.4f}  "
-                f"{r.precision:>7.4f}  {r.accuracy_remaining:>8.4f}"
+                f"{r.precision:>7.4f}  {r.recall:>7.4f}  "
+                f"{r.accuracy_remaining:>8.4f}"
             )
         print()
     print(bar)

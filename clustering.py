@@ -183,6 +183,9 @@ def evaluate_cluster_deferral(
         deferred_labels = labels[list(defer_idx)]
         precision = float((~deferred_labels).mean())
         accuracy_remaining = float(labels[keep_idx].mean()) if keep_idx else 0.0
+        total_errors = int((~labels).sum())
+        true_positives = int((~deferred_labels).sum())
+        recall = float(true_positives / total_errors) if total_errors > 0 else 0.0
 
         threshold = np.sort(error_scores)[::-1][n_defer - 1]
         predictions = (error_scores >= threshold).astype(int)
@@ -194,6 +197,7 @@ def evaluate_cluster_deferral(
             "auroc": auroc,
             "f1_defer": f1,
             "precision": precision,
+            "recall":recall,
             "accuracy_remaining": accuracy_remaining,
             "n_deferred": n_defer,
         })
@@ -291,8 +295,4 @@ def save_phase4_results(
         }, f, indent=2)
 
     print(f"Saved clusters -> {data_dir}clusters.npz")
-<<<<<<< HEAD
     print(f"Saved results -> {data_dir}phase4_results.json")
-=======
-    print(f"Saved results -> {data_dir}phase4_results.json")
->>>>>>> 27cffeb (Results)
