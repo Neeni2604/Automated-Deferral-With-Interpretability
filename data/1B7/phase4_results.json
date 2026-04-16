@@ -49310,6 +49310,7 @@
       "auroc": 0.4759454034524287,
       "f1_defer": 0.3640776699029126,
       "precision": 0.49,
+      "recall": 0.18490566037735848,
       "accuracy_remaining": 0.46,
       "n_deferred": 100
     },
@@ -49319,6 +49320,7 @@
       "auroc": 0.4759454034524287,
       "f1_defer": 0.4009433962264151,
       "precision": 0.52,
+      "recall": 0.2943396226415094,
       "accuracy_remaining": 0.4657142857142857,
       "n_deferred": 150
     },
@@ -49328,6 +49330,7 @@
       "auroc": 0.4759454034524287,
       "f1_defer": 0.43010752688172044,
       "precision": 0.5,
+      "recall": 0.37735849056603776,
       "accuracy_remaining": 0.45,
       "n_deferred": 200
     }

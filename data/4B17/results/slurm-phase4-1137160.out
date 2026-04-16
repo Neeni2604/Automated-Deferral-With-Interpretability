@@ -1,0 +1,129 @@
+============================================================
+STEP 1 - Load data
+============================================================
+Loaded: feature_matrix=(500, 16384), labels=(500,)
+ Correct: 340 / 500 (68.0%)
+ Errors: 160 / 500 (32.0%)
+
+============================================================
+STEP 2 - Separate error instances
+============================================================
+ Error instances : 160
+ Correct instances : 340
+
+============================================================
+STEP 3 - Normalize binary activation patterns
+============================================================
+  Avg active features per instance: 48.3
+
+============================================================
+STEP 4 - Find optimal k
+============================================================
+ k=2: inertia=21.88
+ k=3: inertia=20.39
+ k=4: inertia=19.35
+ k=5: inertia=18.50
+ k=6: inertia=17.69
+ k=7: inertia=17.18
+ k=8: inertia=16.62
+ k=9: inertia=16.29
+ Suggested k: 3
+
+Using k=3
+
+============================================================
+STEP 5 - Cluster error instances (k=3)
+============================================================
+ Cluster 0: 55 error instances
+ Cluster 1: 81 error instances
+ Cluster 2: 24 error instances
+
+============================================================
+STEP 6 - Profile clusters
+============================================================
+
+============================================================
+STEP 7 - Cluster membership deferral
+============================================================
+
+Cluster-based deferral AUROC: 0.6390
+
+============================================================
+  FAILURE CLUSTER PROFILES
+============================================================
+
+  Cluster 0:
+ Size : 55 error instances
+ Coverage : 34.4% of all errors
+ Error ratio : 45.7% of nearby instances are errors
+ Top SAE features:
+ Feature   4919  mean_activation=77.9715
+ Feature   1617  mean_activation=66.2640
+ Feature   3947  mean_activation=55.2430
+ Feature   2813  mean_activation=50.7443
+ Feature    589  mean_activation=37.7632
+
+  Cluster 1:
+ Size : 81 error instances
+ Coverage : 50.6% of all errors
+ Error ratio : 48.8% of nearby instances are errors
+ Top SAE features:
+ Feature   6568  mean_activation=61.8814
+ Feature   9957  mean_activation=41.6224
+ Feature   3947  mean_activation=41.2948
+ Feature   5703  mean_activation=30.5299
+ Feature  15437  mean_activation=30.3973
+
+  Cluster 2:
+ Size : 24 error instances
+ Coverage : 15.0% of all errors
+ Error ratio : 30.2% of nearby instances are errors
+ Top SAE features:
+ Feature   7092  mean_activation=123.0313
+ Feature   3775  mean_activation=76.1574
+ Feature    133  mean_activation=57.0204
+ Feature    496  mean_activation=52.5375
+ Feature  11387  mean_activation=50.1087
+
+============================================================
+
+
+============================================================
+STEP 8 - Compare against Phase 3
+============================================================
+
+==============================================================================
+ CLUSTER DEFERRAL vs PHASE 3 CLASSIFIER COMPARISON
+==============================================================================
+  Coverage  System                   AUROC      F1   Prec@k   Acc Rem
+  --------  ----------------------  ------  ------  -------  --------
+       20%  Cluster Membership      0.6390  0.3538   0.4600    0.7150
+      20%  SAE MLP                 0.7126  0.4231   0.5500    0.7407
+      20%  SAE LogReg              0.6606  0.3462   0.4500    0.7160
+      20%  SAE RF                  0.7910  0.5385   0.7000    0.7778
+      20%  Confidence              0.5915  0.2692   0.3500    0.6914
+      20%  Random                  0.4946  0.3462   0.4500    0.7160
+
+       30%  Cluster Membership      0.6390  0.4065   0.4200    0.7229
+      30%  SAE MLP                 0.7126  0.5161   0.5333    0.7746
+      30%  SAE LogReg              0.6606  0.4516   0.4667    0.7465
+      30%  SAE RF                  0.7910  0.6129   0.6333    0.8169
+      30%  Confidence              0.5915  0.3548   0.3667    0.7042
+      30%  Random                  0.4946  0.3226   0.3333    0.6901
+
+       40%  Cluster Membership      0.6390  0.4222   0.3800    0.7200
+      40%  SAE MLP                 0.7126  0.5833   0.5250    0.8197
+      40%  SAE LogReg              0.6606  0.4722   0.4250    0.7541
+      40%  SAE RF                  0.7910  0.6667   0.6000    0.8689
+      40%  Confidence              0.5915  0.3889   0.3500    0.7049
+      40%  Random                  0.4946  0.3333   0.3000    0.6721
+
+==============================================================================
+
+============================================================
+STEP 9 - Save
+============================================================
+Saved clusters -> data/clusters.npz
+Saved results -> data/phase4_results.json
+
+Done.

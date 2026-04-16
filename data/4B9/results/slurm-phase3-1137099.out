@@ -1,0 +1,166 @@
+============================================================
+STEP 1: Load Phase 2 outputs
+============================================================
+Loaded: feature_matrix=(500, 16384), labels=(500,), log_probs=(500,)
+  Correct: 340 / 500 (68.0%)
+
+============================================================
+STEP 2: Train / val / test split
+============================================================
+  train: 349 instances, correct=237 (67.9%)
+  val: 50 instances, correct=34 (68.0%)
+  test: 101 instances, correct=69 (68.3%)
+
+  Training on 349 instances, validating on 50, testing on 101
+
+============================================================
+STEP 3: Train classifiers
+============================================================
+
+Training Logistic Regression...
+Logistic Regression trained.
+Training MLP...
+MLP trained.
+Training Random Forest...
+Random Forest trained.
+
+Validation set sanity check:
+  LogReg val accuracy: 0.4800
+  MLP val accuracy: 0.6000
+  RF val accuracy: 0.7200
+
+============================================================
+STEP 4: 5-Fold Cross-Validation
+============================================================
+
+  Fold 1/5
+Logistic Regression trained.
+    SAE LogReg: AUROC=0.6404
+MLP trained.
+    SAE MLP: AUROC=0.6280
+Random Forest trained.
+    SAE RF: AUROC=0.5502
+
+  Fold 2/5
+Logistic Regression trained.
+    SAE LogReg: AUROC=0.6229
+MLP trained.
+    SAE MLP: AUROC=0.5858
+Random Forest trained.
+    SAE RF: AUROC=0.5046
+
+  Fold 3/5
+Logistic Regression trained.
+    SAE LogReg: AUROC=0.4544
+MLP trained.
+    SAE MLP: AUROC=0.5128
+Random Forest trained.
+    SAE RF: AUROC=0.5798
+
+  Fold 4/5
+Logistic Regression trained.
+    SAE LogReg: AUROC=0.5648
+MLP trained.
+    SAE MLP: AUROC=0.6425
+Random Forest trained.
+    SAE RF: AUROC=0.4979
+
+  Fold 5/5
+Logistic Regression trained.
+    SAE LogReg: AUROC=0.4893
+MLP trained.
+    SAE MLP: AUROC=0.4648
+Random Forest trained.
+    SAE RF: AUROC=0.4300
+
+==============================================================================
+  K-FOLD CROSS-VALIDATION RESULTS
+==============================================================================
+  System                       AUROC          F1@20%          F1@30%          F1@40%  
+  ------------------  --------------  --------------  --------------  --------------
+  SAE LogReg          0.5543 ± 0.0727  0.2895 ± 0.0853  0.3561 ± 0.0640  0.4113 ± 0.0679  
+  SAE MLP             0.5668 ± 0.0680  0.2702 ± 0.0567  0.3718 ± 0.0490  0.4244 ± 0.0836  
+  SAE RF              0.5125 ± 0.0510  0.3383 ± 0.0308  0.3645 ± 0.0509  0.3831 ± 0.0679  
+==============================================================================
+
+============================================================
+STEP 5: Evaluate deferral systems
+============================================================
+
+==============================================================================
+  DEFERRAL EVALUATION RESULTS
+==============================================================================
+  Coverage  System               AUROC      F1   Prec@k   Acc Rem
+  --------  ------------------  ------  ------  -------  --------
+       20%  SAE LogReg          0.4783  0.2692   0.3500   0.2188    0.6914
+       20%  SAE MLP             0.5038  0.2308   0.3000   0.1875    0.6790
+       20%  SAE RF              0.5827  0.3077   0.4000   0.2500    0.7037
+       20%  Confidence          0.5915  0.2692   0.3500   0.2188    0.6914
+       20%  Random              0.4946  0.3462   0.4500   0.2812    0.7160
+
+       30%  SAE LogReg          0.4783  0.3548   0.3667   0.3438    0.7042
+       30%  SAE MLP             0.5038  0.2903   0.3000   0.2812    0.6761
+       30%  SAE RF              0.5827  0.3871   0.4000   0.3750    0.7183
+       30%  Confidence          0.5915  0.3548   0.3667   0.3438    0.7042
+       30%  Random              0.4946  0.3226   0.3333   0.3125    0.6901
+
+       40%  SAE LogReg          0.4783  0.3889   0.3500   0.4375    0.7049
+       40%  SAE MLP             0.5038  0.3889   0.3500   0.4375    0.7049
+       40%  SAE RF              0.5827  0.3889   0.3500   0.4375    0.7049
+       40%  Confidence          0.5915  0.3889   0.3500   0.4375    0.7049
+       40%  Random              0.4946  0.3333   0.3000   0.3750    0.6721
+
+==============================================================================
+
+==========================================================
+  TOP 20 SAE FEATURES PREDICTING ERRORS
+==========================================================
+   Feature idx   Coefficient
+           294        0.5247
+          2495        0.4890
+          1685        0.4183
+          3226        0.3869
+           205        0.3632
+         14557        0.3391
+          1801        0.3123
+           588        0.2873
+          7254        0.2463
+          7162        0.2385
+          3483        0.2137
+           887        0.2123
+          6146        0.2047
+           314        0.2013
+           174        0.1839
+         11768        0.1403
+           323        0.1337
+           654        0.1106
+          9715        0.1009
+           401        0.0915
+
+  TOP 20 SAE FEATURES PREDICTING CORRECT ANSWERS
+   Feature idx   Coefficient
+           449       -0.9531
+          7336       -0.7983
+           669       -0.4145
+           367       -0.3668
+           142       -0.3537
+            42       -0.3409
+          6218       -0.3338
+         13391       -0.2894
+           312       -0.2871
+          4647       -0.2553
+           122       -0.2509
+         13272       -0.2374
+            13       -0.2225
+          1396       -0.0477
+         11984       -0.0239
+           759       -0.0181
+           578       -0.0101
+         10975        0.0000
+         10880        0.0000
+         10881        0.0000
+==========================================================
+
+Results saved → data/phase3_results.json
+
+Phase 3 complete. Results saved to data/phase3_results.json
