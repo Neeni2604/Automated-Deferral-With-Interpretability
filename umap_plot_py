@@ -1,0 +1,38 @@
+import json
+import numpy as np
+from sklearn.preprocessing import normalize
+
+feature_matrix = np.load("data/1B17/feature_matrix.npy")
+labels         = np.load("data/1B17/labels.npy")
+clusters_data  = np.load("data/1B17/clusters.npz")
+assignments    = clusters_data["assignments"]
+centroids      = clusters_data["centroids"]
+
+with open("data/1B17/instance_ids.json") as f:
+    instance_ids = json.load(f)
+
+with open("data/1B17/labeled_instances.json", encoding="utf-8") as f:
+    instances_raw = json.load(f)
+
+id_to_instance = {inst["id"]: inst for inst in instances_raw}
+
+error_mask     = ~labels
+error_ids      = [instance_ids[i] for i in range(len(labels)) if error_mask[i]]
+error_features = feature_matrix[error_mask]
+X_binary       = (error_features > 0).astype(float)
+X_norm         = normalize(X_binary, norm='l2')
+
+for c in range(3):
+    cluster_mask  = assignments == c
+    cluster_idxs  = np.where(cluster_mask)[0]
+    cluster_feats = X_norm[cluster_mask]
+    centroid      = centroids[c]
+    dists         = np.linalg.norm(cluster_feats - centroid, axis=1)
+    top2          = cluster_idxs[np.argsort(dists)[:2]]
+    print(f"\n=== Cluster {c} ===")
+    for idx in top2:
+        inst = id_to_instance[error_ids[idx]]
+        lines = inst["input_text"].split("\n")
+        hyp_line = next((l for l in lines if l.startswith("Hypothesis:")), "")
+        print(f"  Gold: {inst['gold_label']} | Predicted: {inst['predictions']}")
+        print(f"  {hyp_line[:150]}")
